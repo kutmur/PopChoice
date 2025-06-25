@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PopChoice - AI Movie Recommendations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==================== CSS CUSTOM PROPERTIES ==================== */
+        :root {
+            /* Colors */
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gold: #f4d03f;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            
+            /* Dark Theme */
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #161620;
+            --bg-tertiary: #1e1e2e;
+            --bg-glass: rgba(255, 255, 255, 0.05);
+            --bg-glass-hover: rgba(255, 255, 255, 0.08);
+            
+            /* Text Colors */
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #6b7280;
+            
+            /* Borders */
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --border-accent: rgba(139, 92, 246, 0.3);
+            
+            /* Shadows */
+            --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-elevated: 0 20px 60px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+            
+            /* Typography */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Poppins', sans-serif;
+            
+            /* Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --spacing-2xl: 4rem;
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            /* Transitions */
+            --transition-fast: 0.15s ease-out;
+            --transition-medium: 0.3s ease-out;
+            --transition-slow: 0.5s ease-out;
+        }
+
+        /* ==================== RESET & BASE STYLES ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(244, 208, 63, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ==================== GLASS MORPHISM UTILITIES ==================== */
+        .glass {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            box-shadow: var(--shadow-glass);
+        }
+
+        .glass-hover {
+            transition: all var(--transition-medium);
+        }
+
+        .glass-hover:hover {
+            background: var(--bg-glass-hover);
+            border-color: var(--border-accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-elevated);
+        }
+
+        /* ==================== BUTTONS ==================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-primary);
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(20px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-glass-hover);
+            border-color: var(--accent-purple);
+        }
+
+        .btn-large {
+            padding: var(--spacing-md) var(--spacing-xl);
+            font-size: 1.1rem;
+            border-radius: var(--radius-lg);
+        }
+
+        /* ==================== TYPOGRAPHY ==================== */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        /* ==================== LAYOUT COMPONENTS ==================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-xl) 0;
+            position: relative;
+        }
+
+        /* ==================== NAVIGATION ==================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: var(--spacing-md) 0;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+            transition: width var(--transition-medium);
+            z-index: 1001;
+        }
+
+        /* ==================== WELCOME SECTION ==================== */
+        #welcome {
+            text-align: center;
+            background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-2xl);
+        }
+
+        .feature-card {
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ==================== QUESTIONNAIRE SECTION ==================== */
+        #questionnaire {
+            display: none;
+        }
+
+        .questionnaire-container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            padding: var(--spacing-2xl);
+            border-radius: var(--radius-xl);
+            margin-bottom: var(--spacing-lg);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .question-progress {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            transition: all var(--transition-medium);
+        }
+
+        .progress-dot.active {
+            background: var(--accent-purple);
+            transform: scale(1.2);
+        }
+
+        .progress-dot.completed {
+            background: var(--accent-gold);
+        }
+
+        .question-title {
+            font-size: 1.8rem;
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+        }
+
+        .question-subtitle {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .option-card {
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            border: 2px solid transparent;
+        }
+
+        .option-card:hover {
+            border-color: var(--accent-purple);
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected {
+            border-color: var(--accent-gold);
+            background: rgba(244, 208, 63, 0.1);
+        }
+
+        .question-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* ==================== LOADING SECTION ==================== */
+        #loading {
+            display: none;
+            text-align: center;
+        }
+
+        .loading-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .loading-animation {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto var(--spacing-xl);
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .loading-animation i {
+            font-size: 3rem;
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+            50% { transform: scale(1.1); box-shadow: 0 0 40px rgba(139, 92, 246, 0.6); }
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-secondary);
+        }
+
+        .loading-steps {
+            list-style: none;
+            text-align: left;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .loading-steps li {
+            padding: var(--spacing-xs) 0;
+            opacity: 0.5;
+            transition: opacity var(--transition-medium);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .loading-steps li.active {
+            opacity: 1;
+            color: var(--accent-gold);
+        }
+
+        .loading-steps li i {
+            width: 20px;
+        }
+
+        /* ==================== RESULTS SECTION ==================== */
+        #results {
+            display: none;
+            min-height: auto;
+            padding: var(--spacing-xl) 0;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .perfect-matches {
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .movie-card {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all var(--transition-medium);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-elevated);
+        }
+
+        .movie-poster {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 2/3;
+            background: var(--bg-tertiary);
+        }
+
+        .movie-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-medium);
+        }
+
+        .movie-card:hover .movie-poster img {
+            transform: scale(1.05);
+        }
+
+        .movie-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: var(--spacing-lg);
+            color: white;
+        }
+
+        .movie-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .movie-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .movie-rating {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .match-score {
+            position: absolute;
+            top: var(--spacing-sm);
+            right: var(--spacing-sm);
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            padding: var(--spacing-xs);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* ==================== RESPONSIVE DESIGN ==================== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--spacing-sm);
+            }
+            
+            .section {
+                padding: var(--spacing-lg) 0;
+            }
+            
+            .hero-content {
+                padding: 0 var(--spacing-sm);
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+            
+            .question-card {
+                padding: var(--spacing-lg);
+                min-height: 300px;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: var(--spacing-md);
+            }
+            
+            .question-navigation {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn-large {
+                padding: var(--spacing-sm) var(--spacing-lg);
+                font-size: 1rem;
+            }
+            
+            .movie-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+
+        /* ==================== UTILITY CLASSES ==================== */
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+
+        .mb-sm { margin-bottom: var(--spacing-sm); }
+        .mb-md { margin-bottom: var(--spacing-md); }
+        .mb-lg { margin-bottom: var(--spacing-lg); }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden { display: none !important; }
+        .visible { display: block !important; }
+
+        /* ==================== SCROLLBAR STYLING ==================== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-purple);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold);
+        }
+        /* ==================== CUSTOM FORM ELEMENTS ==================== */
+        .range-slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--bg-tertiary);
+            outline: none;
+            margin: var(--spacing-md) 0;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            cursor: pointer;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .range-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            cursor: pointer;
+            border: none;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--spacing-sm);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .mood-wheel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-md);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .mood-card {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mood-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            z-index: -1;
+        }
+
+        .mood-card:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-purple);
+        }
+
+        .mood-card.selected {
+            border-color: var(--accent-gold);
+            background: rgba(244, 208, 63, 0.1);
+        }
+
+        .mood-card i {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .genre-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--spacing-md);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .genre-card {
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            border: 2px solid transparent;
+            position: relative;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .genre-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-purple);
+        }
+
+        .genre-card.selected {
+            border-color: var(--accent-gold);
+            background: rgba(244, 208, 63, 0.1);
+        }
+
+        .genre-card i {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .timeline-container {
+            margin: var(--spacing-xl) 0;
+            position: relative;
+        }
+
+        .timeline-track {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            position: relative;
+            margin: var(--spacing-lg) 0;
+        }
+
+        .timeline-progress {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 4px;
+            transition: width var(--transition-medium);
+        }
+
+        .timeline-thumb {
+            position: absolute;
+            top: -6px;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: var(--shadow-glow);
+            transition: transform var(--transition-medium);
+        }
+
+        .timeline-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .runtime-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-lg);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .runtime-card {
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            border: 2px solid transparent;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .runtime-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-purple);
+        }
+
+        .runtime-card.selected {
+            border-color: var(--accent-gold);
+            background: rgba(244, 208, 63, 0.1);
+        }
+
+        .runtime-card .runtime-duration {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-purple);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .runtime-card.selected .runtime-duration {
+            color: var(--accent-gold);
+        }
+
+        .intensity-scale {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin: var(--spacing-xl) 0;
+            justify-content: center;
+        }
+
+        .intensity-level {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--bg-tertiary);
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .intensity-level:hover {
+            border-color: var(--accent-purple);
+            transform: scale(1.1);
+        }
+
+        .intensity-level.selected {
+            border-color: var(--accent-gold);
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 2px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            backdrop-filter: blur(20px);
+            transition: all var(--transition-medium);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .suggestion-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+        }
+
+        .suggestion-tag {
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            font-size: 0.9rem;
+        }
+
+        .suggestion-tag:hover {
+            border-color: var(--accent-purple);
+            background: var(--bg-glass-hover);
+        }
+
+        .selected-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+            min-height: 40px;
+        }
+
+        .selected-item {
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: var(--accent-purple);
+            color: white;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: 0.9rem;
+        }
+
+        .selected-item .remove-btn {
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity var(--transition-fast);
+        }
+
+        .selected-item .remove-btn:hover {
+            opacity: 1;
+        }
+
+        .question-error {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: var(--spacing-sm);
+            display: none;
+        }
+
+        .question-help {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: var(--spacing-sm);
+        }
+
+        /* ==================== STEP TRANSITIONS ==================== */
+        .question-card.slide-out-left {
+            animation: slideOutLeft 0.4s ease-in-out forwards;
+        }
+
+        .question-card.slide-in-right {
+            animation: slideInRight 0.4s ease-in-out forwards;
+        }
+
+        .question-card.slide-out-right {
+            animation: slideOutRight 0.4s ease-in-out forwards;
+        }
+
+        .question-card.slide-in-left {
+            animation: slideInLeft 0.4s ease-in-out forwards;
+        }
+
+        @keyframes slideOutLeft {
+            to {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutRight {
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ==================== MOBILE OPTIMIZATIONS ==================== */
+        @media (max-width: 768px) {
+            .mood-wheel {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .genre-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .runtime-options {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+            
+            .intensity-scale {
+                gap: var(--spacing-xs);
+            }
+            
+            .intensity-level {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" style="width: 0%"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <i class="fas fa-film"></i> PopChoice
+                </div>
+                <div class="nav-actions">
+                    <button class="btn btn-secondary" id="restart-btn" style="display: none;">
+                        <i class="fas fa-redo"></i> Start Over
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Welcome Section -->
+    <section id="welcome" class="section">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <h1 class="hero-title">Discover Your Perfect Movie</h1>
+                <p class="hero-subtitle">
+                    AI-powered recommendations tailored to your unique taste. 
+                    Answer a few questions and unlock a world of cinema curated just for you.
+                </p>
+                
+                <button class="btn btn-primary btn-large" id="start-btn">
+                    <i class="fas fa-magic"></i>
+                    Start Finding Movies
+                </button>
+
+                <div class="feature-grid">
+                    <div class="feature-card glass glass-hover">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>AI-Powered</h3>
+                        <p>Advanced algorithms analyze your preferences to find perfect matches</p>
+                    </div>
+                    
+                    <div class="feature-card glass glass-hover">
+                        <div class="feature-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>Personalized</h3>
+                        <p>Every recommendation is tailored to your mood, taste, and viewing context</p>
+                    </div>
+                    
+                    <div class="feature-card glass glass-hover">
+                        <div class="feature-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>Instant Results</h3>
+                        <p>Get curated movie recommendations in under 60 seconds</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Questionnaire Section -->
+    <section id="questionnaire" class="section">
+        <div class="container">
+            <div class="questionnaire-container">
+                <!-- Progress Indicator -->
+                <div class="question-progress">
+                    <div class="progress-dot active"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                    <div class="progress-dot"></div>
+                </div>
+
+                <!-- Question 1: Current Mood -->
+                <div class="question-card glass" data-step="1">
+                    <h2 class="question-title">How are you feeling today?</h2>
+                    <p class="question-subtitle">Let's start with your current vibe - this helps us match the perfect movie mood</p>
+                    
+                    <div class="mood-wheel">
+                        <div class="mood-card" data-mood="cheerful">
+                            <i class="fas fa-laugh" style="color: #f4d03f;"></i>
+                            <div>Cheerful</div>
+                        </div>
+                        <div class="mood-card" data-mood="adventurous">
+                            <i class="fas fa-mountain" style="color: #8b5cf6;"></i>
+                            <div>Adventurous</div>
+                        </div>
+                        <div class="mood-card" data-mood="romantic">
+                            <i class="fas fa-heart" style="color: #f5576c;"></i>
+                            <div>Romantic</div>
+                        </div>
+                        <div class="mood-card" data-mood="thoughtful">
+                            <i class="fas fa-brain" style="color: #3b82f6;"></i>
+                            <div>Thoughtful</div>
+                        </div>
+                        <div class="mood-card" data-mood="relaxed">
+                            <i class="fas fa-leaf" style="color: #10b981;"></i>
+                            <div>Relaxed</div>
+                        </div>
+                        <div class="mood-card" data-mood="energetic">
+                            <i class="fas fa-bolt" style="color: #f59e0b;"></i>
+                            <div>Energetic</div>
+                        </div>
+                        <div class="mood-card" data-mood="nostalgic">
+                            <i class="fas fa-clock" style="color: #8b5cf6;"></i>
+                            <div>Nostalgic</div>
+                        </div>
+                        <div class="mood-card" data-mood="curious">
+                            <i class="fas fa-search" style="color: #06b6d4;"></i>
+                            <div>Curious</div>
+                        </div>
+                    </div>
+
+                    <div class="question-error" id="mood-error">Please select your current mood to continue</div>
+                    
+                    <div class="question-navigation">
+                        <button class="btn btn-secondary" id="prev-btn" style="visibility: hidden;">
+                            <i class="fas fa-arrow-left"></i>
+                            Previous
+                        </button>
+                        <button class="btn btn-primary" id="next-btn">
+                            Next
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 2: Genre Preferences -->
+                <div class="question-card glass" data-step="2" style="display: none;">
+                    <h2 class="question-title">What genres speak to you?</h2>
+                    <p class="question-subtitle">Pick all that sound appealing - we'll find the perfect blend</p>
+                    
+                    <div class="genre-grid">
+                        <div class="genre-card" data-genre="action">
+                            <i class="fas fa-fist-raised" style="color: #ef4444;"></i>
+                            <div>Action</div>
+                        </div>
+                        <div class="genre-card" data-genre="comedy">
+                            <i class="fas fa-laugh-beam" style="color: #f59e0b;"></i>
+                            <div>Comedy</div>
+                        </div>
+                        <div class="genre-card" data-genre="drama">
+                            <i class="fas fa-theater-masks" style="color: #8b5cf6;"></i>
+                            <div>Drama</div>
+                        </div>
+                        <div class="genre-card" data-genre="romance">
+                            <i class="fas fa-heart" style="color: #f5576c;"></i>
+                            <div>Romance</div>
+                        </div>
+                        <div class="genre-card" data-genre="thriller">
+                            <i class="fas fa-user-secret" style="color: #6b7280;"></i>
+                            <div>Thriller</div>
+                        </div>
+                        <div class="genre-card" data-genre="sci-fi">
+                            <i class="fas fa-rocket" style="color: #06b6d4;"></i>
+                            <div>Sci-Fi</div>
+                        </div>
+                        <div class="genre-card" data-genre="horror">
+                            <i class="fas fa-ghost" style="color: #dc2626;"></i>
+                            <div>Horror</div>
+                        </div>
+                        <div class="genre-card" data-genre="fantasy">
+                            <i class="fas fa-magic" style="color: #7c3aed;"></i>
+                            <div>Fantasy</div>
+                        </div>
+                        <div class="genre-card" data-genre="documentary">
+                            <i class="fas fa-video" style="color: #059669;"></i>
+                            <div>Documentary</div>
+                        </div>
+                        <div class="genre-card" data-genre="animation">
+                            <i class="fas fa-palette" style="color: #f472b6;"></i>
+                            <div>Animation</div>
+                        </div>
+                        <div class="genre-card" data-genre="mystery">
+                            <i class="fas fa-question-circle" style="color: #4f46e5;"></i>
+                            <div>Mystery</div>
+                        </div>
+                        <div class="genre-card" data-genre="adventure">
+                            <i class="fas fa-compass" style="color: #10b981;"></i>
+                            <div>Adventure</div>
+                        </div>
+                    </div>
+
+                    <div class="question-error" id="genre-error">Please select at least one genre</div>
+                    <div class="question-help">Select multiple genres to get more diverse recommendations</div>
+                    
+                    <div class="question-navigation">
+                        <button class="btn btn-secondary" id="prev-btn">
+                            <i class="fas fa-arrow-left"></i>
+                            Previous
+                        </button>
+                        <button class="btn btn-primary" id="next-btn">
+                            Next
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 3: Movie Era -->
+                <div class="question-card glass" data-step="3" style="display: none;">
+                    <h2 class="question-title">When was cinema at its best?</h2>
+                    <p class="question-subtitle">Slide to your preferred movie era - from golden classics to fresh releases</p>
+                    
+                    <div class="timeline-container">
+                        <div class="slider-labels">
+                            <span>1920s</span>
+                            <span>1950s</span>
+                            <span>1980s</span>
+                            <span>2000s</span>
+                            <span>2020s</span>
+                        </div>
+                        <input type="range" class="range-slider" id="era-slider" min="1920" max="2024" value="2010" step="1">
+                        <div class="slider-labels">
+                            <span>Golden Age</span>
+                            <span>Classic Hollywood</span>
+                            <span>Modern Era</span>
+                            <span>Digital Age</span>
+                            <span>Streaming Era</span>
+                        </div>
+                        <div class="text-center" style="margin-top: var(--spacing-md);">
+                            <div style="font-size: 1.2rem; color: var(--accent-gold);">
+                                <span id="era-display">2010s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-help">We'll focus on movies from this era, but may include some timeless classics too</div>
+                    
+                    <div class="question-navigation">
+                        <button class="btn btn-secondary" id="prev-btn">
+                            <i class="fas fa-arrow-left"></i>
+                            Previous
+                        </button>
+                        <button class="btn btn-primary" id="next-btn">
+                            Next
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 4: Runtime Preference -->
+                <div class="question-card glass" data-step="4" style="display: none;">
+                    <h2 class="question-title">How much time do you have?</h2>
+                    <p class="question-subtitle">Let's find something that fits your schedule perfectly</p>
+                    
+                    <div class="runtime-options">
+                        <div class="runtime-card glass" data-runtime="short">
+                            <div class="runtime-duration">< 90 min</div>
+                            <div style="color: var(--text-secondary); margin-bottom: var(--spacing-sm);">Quick Watch</div>
+                            <div style="font-size: 0.9rem;">Perfect for a short break or when you're feeling indecisive</div>
+                        </div>
+                        <div class="runtime-card glass" data-runtime="medium">
+                            <div class="runtime-duration">90-150 min</div>
+                            <div style="color: var(--text-secondary); margin-bottom: var(--spacing-sm);">Standard Length</div>
+                            <div style="font-size: 0.9rem;">The sweet spot - enough time to dive deep into the story</div>
+                        </div>
+                        <div class="runtime-card glass" data-runtime="long">
+                            <div class="runtime-duration">150+ min</div>
+                            <div style="color: var(--text-secondary); margin-bottom: var(--spacing-sm);">Epic Experience</div>
+                            <div style="font-size: 0.9rem;">When you want to be completely immersed</div>
+                        </div>
+                    </div>
+
+                    <div class="question-error" id="runtime-error">Please select your preferred runtime</div>
+                    
+                    <div class="question-navigation">
+                        <button class="btn btn-secondary" id="prev-btn">
+                            <i class="fas fa-arrow-left"></i>
+                            Previous
+                        </button>
+                        <button class="btn btn-primary" id="next-btn">
+                            Next
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 5: Content Intensity -->
+                <div class="question-card glass" data-step="5" style="display: none;">
+                    <h2 class="question-title">What's your comfort level?</h2>
+                    <p class="question-subtitle">Rate from 1 (family-friendly) to 10 (mature content)</p>
+                    
+                    <div class="intensity-scale">
+                        <div class="intensity-level" data-intensity="1">1</div>
+                        <div class="intensity-level" data-intensity="2">2</div>
+                        <div class="intensity-level" data-intensity="3">3</div>
+                        <div class="intensity-level" data-intensity="4">4</div>
+                        <div class="intensity-level" data-intensity="5">5</div>
+                        <div class="intensity-level" data-intensity="6">6</div>
+                        <div class="intensity-level" data-intensity="7">7</div>
+                        <div class="intensity-level" data-intensity="8">8</div>
+                        <div class="intensity-level" data-intensity="9">9</div>
+                        <div class="intensity-level" data-intensity="10">10</div>
+                    </div>
+
+                    <div class="slider-labels" style="margin-top: var(--spacing-md);">
+                        <span style="color: var(--text-muted);">G-rated, wholesome content</span>
+                        <span style="color: var(--text-muted);">R-rated, mature themes</span>
+                    </div>
+
+                    <div class="question-error" id="intensity-error">Please select your comfort level</div>
+                    
+                    <div class="question-navigation">
+                        <button class="btn btn-secondary" id="prev-btn">
+                            <i class="fas fa-arrow-left"></i>
+                            Previous
+                        </button>
+                        <button class="btn btn-primary" id="next-btn">
+                            Next
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 6: Favorite People -->
+                <div class="question-card glass" data-step="6" style="display: none;">
+                    <h2 class="question-title">Any favorite actors or directors?</h2>
+                    <p class="question-subtitle">Optional: Tell us who you love watching - we'll find their best work</p>
+                    
+                    <input type="text" class="search-input" id="people-search" placeholder="Start typing a name..." autocomplete="off">
+                    
+                    <div class="suggestion-tags" id="people-suggestions">
+                        <div class="suggestion-tag" data-person="Leonardo DiCaprio">Leonardo DiCaprio</div>
+                        <div class="suggestion-tag" data-person="Meryl Streep">Meryl Streep</div>
+                        <div class="suggestion-tag" data-person="Christopher Nolan">Christopher Nolan</div>
+                        <div class="suggestion-tag" data-person="Scarlett Johansson">Scarlett Johansson</div>
+                        <div class="suggestion-tag" data-person="Quentin Tarantino">Quentin Tarantino</div>
+                        <div class="suggestion-tag" data-person="Emma Stone">Emma Stone</div>
+                        <div class="suggestion-tag" data-person="Martin Scorsese">Martin Scorsese</div>
+                        <div class="suggestion-tag" data-person="Margot Robbie">Margot Robbie</div>
+                    </div>
+
+                    <div class="selected-items" id="selected-people">
+                        <!-- Selected people will appear here -->
+                    </div>
+
+                    <div class="question-help">Skip this if you want to discover new actors and directors</div>
+                    
+                    <div class="question-navigation">
+                        <button class="btn btn-secondary" id="prev-btn">
+                            <i class="fas fa-arrow-left"></i>
+                            Previous
+                        </button>
+                        <button class="btn btn-primary" id="next-btn">
+                            Next
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question 7: Special Preferences -->
+                <div class="question-card glass" data-step="7" style="display: none;">
+                    <h2 class="question-title">Any special preferences?</h2>
+                    <p class="question-subtitle">Fine-tune your experience with these optional settings</p>
+                    
+                    <div style="margin: var(--spacing-xl) 0;">
+                        <div style="margin-bottom: var(--spacing-lg);">
+                            <label style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">
+                                Romance Level (1 = None, 10 = Very Romantic)
+                            </label>
+                            <input type="range" class="range-slider" id="romance-slider" min="1" max="10" value="5">
+                            <div class="slider-labels">
+                                <span>No Romance</span>
+                                <span>Moderate</span>
+                                <span>Very Romantic</span>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: var(--spacing-lg);">
+                            <label style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">
+                                Action Intensity (1 = Peaceful, 10 = Non-stop Action)
+                            </label>
+                            <input type="range" class="range-slider" id="action-slider" min="1" max="10" value="5">
+                            <div class="slider-labels">
+                                <span>Peaceful</span>
+                                <span>Some Action</span>
+                                <span>Action-Packed</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">
+                                Emotional Depth (1 = Light-hearted, 10 = Deep & Meaningful)
+                            </label>
+                            <input type="range" class="range-slider" id="emotion-slider" min="1" max="10" value="5">
+                            <div class="slider-labels">
+                                <span>Light-hearted</span>
+                                <span>Balanced</span>
+                                <span>Deeply Moving</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-help">These help us understand the exact vibe you're going for</div>
+                    
+                    <div class="question-navigation">
+                        <button class="btn btn-secondary" id="prev-btn">
+                            <i class="fas fa-arrow-left"></i>
+                            Previous
+                        </button>
+                        <button class="btn btn-primary" id="finish-btn">
+                            <i class="fas fa-magic"></i>
+                            Find My Movies
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Section -->
+    <section id="loading" class="section">
+        <div class="container">
+            <div class="loading-content fade-in">
+                <div class="loading-animation">
+                    <i class="fas fa-magic"></i>
+                </div>
+                
+                <h2 class="section-title">Crafting Your Perfect Recommendations</h2>
+                <p class="loading-text">Our AI is analyzing your preferences...</p>
+                
+                <ul class="loading-steps">
+                    <li class="active">
+                        <i class="fas fa-user-check"></i>
+                        <span>Analyzing your preferences</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-database"></i>
+                        <span>Searching movie database</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-calculator"></i>
+                        <span>Calculating compatibility scores</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-sort"></i>
+                        <span>Ranking recommendations</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-sparkles"></i>
+                        <span>Finalizing your matches</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="section">
+        <div class="container">
+            <div class="results-header fade-in">
+                <h2 class="section-title">Your Perfect Movie Matches</h2>
+                <p class="hero-subtitle">Based on your preferences, here are movies we think you'll love</p>
+            </div>
+
+            <!-- Perfect Matches -->
+            <div class="perfect-matches">
+                <h3 class="mb-lg" style="color: var(--accent-gold); text-align: center;">
+                    <i class="fas fa-star"></i> Top Recommendations
+                </h3>
+                
+                <div class="movie-grid">
+                    <!-- Sample Movie Cards -->
+                    <div class="movie-card glass glass-hover fade-in">
+                        <div class="movie-poster">
+                            <div class="match-score">98%</div>
+                            <div style="background: linear-gradient(45deg, var(--accent-purple), var(--accent-blue)); height: 100%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3;"></i>
+                            </div>
+                            <div class="movie-overlay">
+                                <div class="movie-title">The Grand Budapest Hotel</div>
+                                <div class="movie-info">
+                                    <span>2014 • Comedy</span>
+                                    <div class="movie-rating">
+                                        <i class="fas fa-star" style="color: var(--accent-gold);"></i>
+                                        <span>8.1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="movie-card glass glass-hover fade-in">
+                        <div class="movie-poster">
+                            <div class="match-score">95%</div>
+                            <div style="background: linear-gradient(45deg, #f093fb, #f5576c); height: 100%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3;"></i>
+                            </div>
+                            <div class="movie-overlay">
+                                <div class="movie-title">Moonrise Kingdom</div>
+                                <div class="movie-info">
+                                    <span>2012 • Adventure</span>
+                                    <div class="movie-rating">
+                                        <i class="fas fa-star" style="color: var(--accent-gold);"></i>
+                                        <span>7.8</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="movie-card glass glass-hover fade-in">
+                        <div class="movie-poster">
+                            <div class="match-score">92%</div>
+                            <div style="background: linear-gradient(45deg, var(--accent-gold), #ff6b6b); height: 100%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3;"></i>
+                            </div>
+                            <div class="movie-overlay">
+                                <div class="movie-title">Amélie</div>
+                                <div class="movie-info">
+                                    <span>2001 • Romance</span>
+                                    <div class="movie-rating">
+                                        <i class="fas fa-star" style="color: var(--accent-gold);"></i>
+                                        <span>8.3</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More Recommendations -->
+            <div class="more-recommendations">
+                <h3 class="mb-lg" style="text-align: center;">More Great Options</h3>
+                
+                <div class="movie-grid">
+                    <!-- Additional sample cards -->
+                    <div class="movie-card glass glass-hover fade-in">
+                        <div class="movie-poster">
+                            <div class="match-score">89%</div>
+                            <div style="background: var(--bg-tertiary); height: 100%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3; color: var(--text-muted);"></i>
+                            </div>
+                            <div class="movie-overlay">
+                                <div class="movie-title">Her</div>
+                                <div class="movie-info">
+                                    <span>2013 • Drama</span>
+                                    <div class="movie-rating">
+                                        <i class="fas fa-star" style="color: var(--accent-gold);"></i>
+                                        <span>8.0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="movie-card glass glass-hover fade-in">
+                        <div class="movie-poster">
+                            <div class="match-score">87%</div>
+                            <div style="background: var(--bg-tertiary); height: 100%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3; color: var(--text-muted);"></i>
+                            </div>
+                            <div class="movie-overlay">
+                                <div class="movie-title">Lost in Translation</div>
+                                <div class="movie-info">
+                                    <span>2003 • Drama</span>
+                                    <div class="movie-rating">
+                                        <i class="fas fa-star" style="color: var(--accent-gold);"></i>
+                                        <span>7.7</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="movie-card glass glass-hover fade-in">
+                        <div class="movie-poster">
+                            <div class="match-score">85%</div>
+                            <div style="background: var(--bg-tertiary); height: 100%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3; color: var(--text-muted);"></i>
+                            </div>
+                            <div class="movie-overlay">
+                                <div class="movie-title">The Royal Tenenbaums</div>
+                                <div class="movie-info">
+                                    <span>2001 • Comedy</span>
+                                    <div class="movie-rating">
+                                        <i class="fas fa-star" style="color: var(--accent-gold);"></i>
+                                        <span>7.6</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="text-center" style="margin-top: var(--spacing-2xl);">
+                <button class="btn btn-primary btn-large" style="margin-right: var(--spacing-md);">
+                    <i class="fas fa-redo"></i>
+                    Get More Recommendations
+                </button>
+                <button class="btn btn-secondary btn-large">
+                    <i class="fas fa-sliders-h"></i>
+                    Refine Preferences
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // ==================== APPLICATION STATE ==================== 
+        const AppState = {
+            currentStep: 1,
+            totalSteps: 7,
+            formData: {
+                mood: null,
+                genres: [],
+                era: 2010,
+                runtime: null,
+                intensity: null,
+                favoritePeople: [],
+                romance: 5,
+                action: 5,
+                emotion: 5
+            },
+            isTransitioning: false
+        };
+
+        // ==================== DOM ELEMENTS ==================== 
+        const elements = {
+            // Navigation
+            startBtn: document.getElementById('start-btn'),
+            restartBtn: document.getElementById('restart-btn'),
+            prevBtn: document.getElementById('prev-btn'),
+            nextBtn: document.getElementById('next-btn'),
+            finishBtn: document.getElementById('finish-btn'),
+            
+            // Sections
+            welcomeSection: document.getElementById('welcome'),
+            questionnaireSection: document.getElementById('questionnaire'),
+            loadingSection: document.getElementById('loading'),
+            resultsSection: document.getElementById('results'),
+            
+            // Progress
+            progressBar: document.querySelector('.progress-bar'),
+            progressDots: document.querySelectorAll('.progress-dot'),
+            
+            // Question cards
+            questionCards: document.querySelectorAll('.question-card'),
+            
+            // Form elements
+            moodCards: document.querySelectorAll('[data-mood]'),
+            genreCards: document.querySelectorAll('[data-genre]'),
+            eraSlider: document.getElementById('era-slider'),
+            eraDisplay: document.getElementById('era-display'),
+            runtimeCards: document.querySelectorAll('[data-runtime]'),
+            intensityLevels: document.querySelectorAll('[data-intensity]'),
+            peopleSearch: document.getElementById('people-search'),
+            peopleSuggestions: document.getElementById('people-suggestions'),
+            selectedPeople: document.getElementById('selected-people'),
+            romanceSlider: document.getElementById('romance-slider'),
+            actionSlider: document.getElementById('action-slider'),
+            emotionSlider: document.getElementById('emotion-slider')
+        };
+
+        // ==================== UTILITY FUNCTIONS ==================== 
+        function updateProgressBar() {
+            const progress = (AppState.currentStep / AppState.totalSteps) * 100;
+            elements.progressBar.style.width = `${progress}%`;
+        }
+
+        function updateProgressDots() {
+            elements.progressDots.forEach((dot, index) => {
+                dot.classList.remove('active', 'completed');
+                if (index + 1 < AppState.currentStep) {
+                    dot.classList.add('completed');
+                } else if (index + 1 === AppState.currentStep) {
+                    dot.classList.add('active');
+                }
+            });
+        }
+
+        function showError(errorId, message) {
+            const errorElement = document.getElementById(errorId);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+                setTimeout(() => {
+                    errorElement.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function validateCurrentStep() {
+            switch (AppState.currentStep) {
+                case 1:
+                    if (!AppState.formData.mood) {
+                        showError('mood-error', 'Please select your current mood to continue');
+                        return false;
+                    }
+                    break;
+                case 2:
+                    if (AppState.formData.genres.length === 0) {
+                        showError('genre-error', 'Please select at least one genre');
+                        return false;
+                    }
+                    break;
+                case 4:
+                    if (!AppState.formData.runtime) {
+                        showError('runtime-error', 'Please select your preferred runtime');
+                        return false;
+                    }
+                    break;
+                case 5:
+                    if (!AppState.formData.intensity) {
+                        showError('intensity-error', 'Please select your comfort level');
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        // ==================== STEP TRANSITIONS ==================== 
+        function transitionToStep(newStep, direction = 'next') {
+            if (AppState.isTransitioning) return;
+            AppState.isTransitioning = true;
+
+            const currentCard = document.querySelector(`[data-step="${AppState.currentStep}"]`);
+            const nextCard = document.querySelector(`[data-step="${newStep}"]`);
+
+            if (!currentCard || !nextCard) {
+                AppState.isTransitioning = false;
+                return;
+            }
+
+            // Animation classes based on direction
+            const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
+            const inClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
+
+            // Hide current card with animation
+            currentCard.classList.add(outClass);
+            
+            setTimeout(() => {
+                currentCard.style.display = 'none';
+                currentCard.classList.remove(outClass);
+                
+                // Show next card with animation
+                nextCard.style.display = 'block';
+                nextCard.classList.add(inClass);
+                
+                AppState.currentStep = newStep;
+                updateProgressBar();
+                updateProgressDots();
+                updateNavigationButtons();
+                
+                setTimeout(() => {
+                    nextCard.classList.remove(inClass);
+                    AppState.isTransitioning = false;
+                }, 400);
+            }, 400);
+        }
+
+        function updateNavigationButtons() {
+            // Update previous button
+            if (AppState.currentStep === 1) {
+                elements.prevBtn.style.visibility = 'hidden';
+            } else {
+                elements.prevBtn.style.visibility = 'visible';
+            }
+
+            // Update next/finish button
+            if (AppState.currentStep === AppState.totalSteps) {
+                elements.nextBtn.style.display = 'none';
+                elements.finishBtn.style.display = 'inline-flex';
+            } else {
+                elements.nextBtn.style.display = 'inline-flex';
+                elements.finishBtn.style.display = 'none';
+            }
+        }
+
+        // ==================== FORM HANDLERS ==================== 
+        function initializeMoodSelection() {
+            elements.moodCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    // Remove previous selection
+                    elements.moodCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selection to clicked card
+                    card.classList.add('selected');
+                    AppState.formData.mood = card.dataset.mood;
+                    
+                    // Auto-advance after selection
+                    setTimeout(() => {
+                        if (validateCurrentStep()) {
+                            transitionToStep(2);
+                        }
+                    }, 500);
+                });
+            });
+        }
+
+        function initializeGenreSelection() {
+            elements.genreCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const genre = card.dataset.genre;
+                    
+                    if (card.classList.contains('selected')) {
+                        // Deselect
+                        card.classList.remove('selected');
+                        AppState.formData.genres = AppState.formData.genres.filter(g => g !== genre);
+                    } else {
+                        // Select
+                        card.classList.add('selected');
+                        AppState.formData.genres.push(genre);
+                    }
+                });
+            });
+        }
+
+        function initializeEraSlider() {
+            function updateEraDisplay(value) {
+                const decade = Math.floor(value / 10) * 10;
+                elements.eraDisplay.textContent = `${decade}s`;
+                AppState.formData.era = parseInt(value);
+            }
+
+            elements.eraSlider.addEventListener('input', (e) => {
+                updateEraDisplay(e.target.value);
+            });
+
+            // Initialize display
+            updateEraDisplay(elements.eraSlider.value);
+        }
+
+        function initializeRuntimeSelection() {
+            elements.runtimeCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    // Remove previous selection
+                    elements.runtimeCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selection to clicked card
+                    card.classList.add('selected');
+                    AppState.formData.runtime = card.dataset.runtime;
+                    
+                    // Auto-advance after selection
+                    setTimeout(() => {
+                        if (validateCurrentStep()) {
+                            transitionToStep(5);
+                        }
+                    }, 500);
+                });
+            });
+        }
+
+        function initializeIntensitySelection() {
+            elements.intensityLevels.forEach(level => {
+                level.addEventListener('click', () => {
+                    // Remove previous selection
+                    elements.intensityLevels.forEach(l => l.classList.remove('selected'));
+                    
+                    // Add selection to clicked level
+                    level.classList.add('selected');
+                    AppState.formData.intensity = parseInt(level.dataset.intensity);
+                    
+                    // Auto-advance after selection
+                    setTimeout(() => {
+                        if (validateCurrentStep()) {
+                            transitionToStep(6);
+                        }
+                    }, 500);
+                });
+            });
+        }
+
+        function initializePeopleSearch() {
+            // Suggestion tags
+            document.querySelectorAll('[data-person]').forEach(tag => {
+                tag.addEventListener('click', () => {
+                    const person = tag.dataset.person;
+                    addSelectedPerson(person);
+                });
+            });
+
+            // Search input
+            elements.peopleSearch.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const person = e.target.value.trim();
+                    if (person) {
+                        addSelectedPerson(person);
+                        e.target.value = '';
+                    }
+                }
+            });
+        }
+
+        function addSelectedPerson(person) {
+            if (!AppState.formData.favoritePeople.includes(person)) {
+                AppState.formData.favoritePeople.push(person);
+                renderSelectedPeople();
+            }
+        }
+
+        function removeSelectedPerson(person) {
+            AppState.formData.favoritePeople = AppState.formData.favoritePeople.filter(p => p !== person);
+            renderSelectedPeople();
+        }
+
+        function renderSelectedPeople() {
+            elements.selectedPeople.innerHTML = AppState.formData.favoritePeople.map(person => `
+                <div class="selected-item">
+                    <span>${person}</span>
+                    <i class="fas fa-times remove-btn" onclick="removeSelectedPerson('${person}')"></i>
+                </div>
+            `).join('');
+        }
+
+        function initializeSliders() {
+            elements.romanceSlider.addEventListener('input', (e) => {
+                AppState.formData.romance = parseInt(e.target.value);
+            });
+
+            elements.actionSlider.addEventListener('input', (e) => {
+                AppState.formData.action = parseInt(e.target.value);
+            });
+
+            elements.emotionSlider.addEventListener('input', (e) => {
+                AppState.formData.emotion = parseInt(e.target.value);
+            });
+        }
+
+        // ==================== NAVIGATION HANDLERS ==================== 
+        function initializeNavigation() {
+            elements.startBtn.addEventListener('click', () => {
+                elements.welcomeSection.style.display = 'none';
+                elements.questionnaireSection.style.display = 'block';
+                elements.restartBtn.style.display = 'inline-flex';
+                updateProgressBar();
+                updateProgressDots();
+            });
+
+            elements.restartBtn.addEventListener('click', () => {
+                // Reset application state
+                AppState.currentStep = 1;
+                AppState.formData = {
+                    mood: null,
+                    genres: [],
+                    era: 2010,
+                    runtime: null,
+                    intensity: null,
+                    favoritePeople: [],
+                    romance: 5,
+                    action: 5,
+                    emotion: 5
+                };
+
+                // Reset UI
+                elements.questionnaireSection.style.display = 'none';
+                elements.loadingSection.style.display = 'none';
+                elements.resultsSection.style.display = 'none';
+                elements.welcomeSection.style.display = 'block';
+                elements.restartBtn.style.display = 'none';
+
+                // Reset form selections
+                document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+                elements.selectedPeople.innerHTML = '';
+                elements.eraSlider.value = 2010;
+                elements.romanceSlider.value = 5;
+                elements.actionSlider.value = 5;
+                elements.emotionSlider.value = 5;
+
+                // Reset question visibility
+                elements.questionCards.forEach((card, index) => {
+                    card.style.display = index === 0 ? 'block' : 'none';
+                });
+
+                updateProgressBar();
+                updateProgressDots();
+            });
+
+            elements.prevBtn.addEventListener('click', () => {
+                if (AppState.currentStep > 1) {
+                    transitionToStep(AppState.currentStep - 1, 'prev');
+                }
+            });
+
+            elements.nextBtn.addEventListener('click', () => {
+                if (validateCurrentStep() && AppState.currentStep < AppState.totalSteps) {
+                    transitionToStep(AppState.currentStep + 1, 'next');
+                }
+            });
+
+            elements.finishBtn.addEventListener('click', () => {
+                console.log('Form Data:', AppState.formData);
+                
+                // Show loading screen
+                elements.questionnaireSection.style.display = 'none';
+                elements.loadingSection.style.display = 'block';
+                
+                // Simulate loading process
+                simulateLoading();
+            });
+        }
+
+        // ==================== LOADING SIMULATION ==================== 
+        function simulateLoading() {
+            const steps = document.querySelectorAll('.loading-steps li');
+            let currentLoadingStep = 0;
+
+            const loadingInterval = setInterval(() => {
+                if (currentLoadingStep > 0) {
+                    steps[currentLoadingStep - 1].classList.remove('active');
+                }
+                
+                if (currentLoadingStep < steps.length) {
+                    steps[currentLoadingStep].classList.add('active');
+                    currentLoadingStep++;
+                } else {
+                    clearInterval(loadingInterval);
+                    
+                    // Show results after loading
+                    setTimeout(() => {
+                        elements.loadingSection.style.display = 'none';
+                        elements.resultsSection.style.display = 'block';
+                    }, 1000);
+                }
+            }, 800);
+        }
+
+        // ==================== INITIALIZATION ==================== 
+        function initializeApp() {
+            initializeNavigation();
+            initializeMoodSelection();
+            initializeGenreSelection();
+            initializeEraSlider();
+            initializeRuntimeSelection();
+            initializeIntensitySelection();
+            initializePeopleSearch();
+            initializeSliders();
+            
+            // Make removeSelectedPerson globally available
+            window.removeSelectedPerson = removeSelectedPerson;
+            
+            // Initialize progress
+            updateProgressBar();
+            updateProgressDots();
+            updateNavigationButtons();
+        }
+
+        // Start the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
