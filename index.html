@@ -1028,22 +1028,378 @@
                 font-size: 0.9rem;
             }
         }
+
+        /* ==================== MODAL STYLES ==================== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-lg);
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            position: relative;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-glass);
+            box-shadow: var(--shadow-elevated);
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease-out;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-header {
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: var(--spacing-xs);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+        }
+
+        .modal-body {
+            padding: var(--spacing-lg);
+        }
+
+        .share-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .share-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md);
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all var(--transition-medium);
+            cursor: pointer;
+            font-family: var(--font-primary);
+            font-size: 0.9rem;
+            justify-content: center;
+        }
+
+        .share-btn:hover {
+            background: var(--bg-glass-hover);
+            border-color: var(--border-accent);
+            transform: translateY(-2px);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: var(--spacing-lg);
+            right: var(--spacing-lg);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            max-width: 300px;
+            z-index: 1001;
+            animation: toastIn 0.3s ease-out;
+            box-shadow: var(--shadow-elevated);
+            backdrop-filter: blur(20px);
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .toast.success { border-color: var(--accent-gold); }
+        .toast.error { border-color: #ff6b6b; }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .toast-icon { font-size: 1.2rem; }
+        .toast.success .toast-icon { color: var(--accent-gold); }
+        .toast.error .toast-icon { color: #ff6b6b; }
+
+        /* ==================== ACCESSIBILITY ENHANCEMENTS ==================== */
+        .btn:focus, .movie-card:focus, .modal-close:focus {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        .btn-ghost {
+            background: none;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            padding: var(--spacing-sm) var(--spacing-md);
+        }
+
+        .btn-ghost:hover {
+            background: var(--bg-glass);
+            border-color: var(--border-glass);
+            color: var(--text-primary);
+        }
+
+        .btn-text {
+            margin-left: var(--spacing-xs);
+        }
+
+        @media (max-width: 768px) {
+            .btn-text {
+                display: none;
+            }
+        }
+
+        /* ==================== WATCHLIST STYLES ==================== */
+        .watchlist-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--bg-glass);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-md);
+            transition: all var(--transition-medium);
+        }
+
+        .watchlist-item:hover {
+            background: var(--bg-glass-hover);
+            transform: translateY(-2px);
+        }
+
+        .watchlist-poster {
+            width: 60px;
+            height: 90px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .watchlist-info {
+            flex: 1;
+        }
+
+        .watchlist-title {
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .watchlist-meta {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .watchlist-actions {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .watchlist-action {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: none;
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .watchlist-action:hover {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+            color: white;
+        }
+
+        /* ==================== RATING STARS ==================== */
+        .rating-stars {
+            display: flex;
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all var(--transition-fast);
+            padding: var(--spacing-xs);
+            border-radius: var(--radius-sm);
+        }
+
+        .star-btn:hover, .star-btn.active {
+            color: var(--accent-gold);
+            transform: scale(1.1);
+        }
+
+        .star-btn:focus {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        /* ==================== LOADING ENHANCEMENTS ==================== */
+        .loading-progress {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue), var(--accent-gold));
+            width: 0%;
+            transition: width 0.3s ease-out;
+            border-radius: 3px;
+            background-size: 200% 100%;
+            animation: gradientShift 2s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ==================== ACCESSIBILITY: REDUCED MOTION ==================== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .loading-progress-bar {
+                animation: none;
+            }
+        }
+
+        /* ==================== HIGH CONTRAST MODE ==================== */
+        @media (prefers-contrast: high) {
+            :root {
+                --text-primary: #ffffff;
+                --text-secondary: #cccccc;
+                --bg-primary: #000000;
+                --bg-secondary: #111111;
+                --border-glass: #666666;
+            }
+        }
+
+        /* ==================== DARK MODE ENHANCEMENTS ==================== */
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg-primary: #f8fafc;
+                --bg-secondary: #ffffff;
+                --bg-tertiary: #f1f5f9;
+                --text-primary: #1e293b;
+                --text-secondary: #64748b;
+                --text-muted: #94a3b8;
+            }
+        }
+
+        /* ==================== KEYBOARD NAVIGATION ==================== */
+        .keyboard-user *:focus {
+            outline: 2px solid var(--accent-gold) !important;
+            outline-offset: 2px !important;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+
+        .skip-link:focus {
+            top: 6px;
+        }
     </style>
 </head>
 <body>
+    <!-- Accessibility Skip Links -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <!-- Progress Bar -->
-    <div class="progress-bar" style="width: 0%"></div>
+    <div class="progress-bar" style="width: 0%" role="progressbar" aria-label="Recommendation progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
 
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
         <div class="container">
             <div class="nav-content">
                 <div class="logo">
-                    <i class="fas fa-film"></i> PopChoice
+                    <h1 style="margin: 0; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                        <i class="fas fa-film"></i> PopChoice
+                    </h1>
                 </div>
                 <div class="nav-actions">
-                    <button class="btn btn-secondary" id="restart-btn" style="display: none;">
-                        <i class="fas fa-redo"></i> Start Over
+                    <button class="btn btn-ghost" id="help-btn" aria-label="Open help and about information">
+                        <i class="fas fa-question-circle"></i>
+                        <span class="btn-text">Help</span>
+                    </button>
+                    <button class="btn btn-ghost" id="feedback-btn" aria-label="Provide feedback">
+                        <i class="fas fa-comment"></i>
+                        <span class="btn-text">Feedback</span>
+                    </button>
+                    <button class="btn btn-secondary" id="restart-btn" style="display: none;" aria-label="Restart the recommendation process">
+                        <i class="fas fa-redo"></i>
+                        <span class="btn-text">Start Over</span>
                     </button>
                 </div>
             </div>
@@ -1489,6 +1845,52 @@
             <div class="results-header fade-in">
                 <h2 class="section-title">Your Perfect Movie Matches</h2>
                 <p class="hero-subtitle">Based on your preferences, here are movies we think you'll love</p>
+                
+                <!-- Action Buttons -->
+                <div class="results-actions" style="margin-top: var(--spacing-lg); display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary" id="new-recommendations-btn" aria-label="Generate new movie recommendations">
+                        <i class="fas fa-refresh"></i>
+                        Get New Recommendations
+                    </button>
+                    <button class="btn btn-secondary" id="surprise-me-btn" aria-label="Get a random quality movie recommendation">
+                        <i class="fas fa-dice"></i>
+                        Surprise Me!
+                    </button>
+                    <button class="btn btn-secondary" id="mood-quick-btn" aria-label="Get quick recommendations based on current mood">
+                        <i class="fas fa-zap"></i>
+                        Quick Mood Pick
+                    </button>
+                    <button class="btn btn-secondary" id="share-results-btn" aria-label="Share your movie recommendations">
+                        <i class="fas fa-share-alt"></i>
+                        Share Results
+                    </button>
+                    <button class="btn btn-secondary" id="view-watchlist-btn" aria-label="View your saved watchlist">
+                        <i class="fas fa-bookmark"></i>
+                        View Watchlist (<span id="watchlist-count">0</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Analytics Summary -->
+            <div class="analytics-summary fade-in" style="text-align: center; margin-bottom: var(--spacing-xl); padding: var(--spacing-lg); background: var(--bg-glass); border-radius: var(--radius-lg); border: 1px solid var(--border-glass);">
+                <p style="color: var(--text-secondary); margin-bottom: var(--spacing-sm);">
+                    <i class="fas fa-chart-line" style="color: var(--accent-gold);"></i>
+                    <span id="analytics-text">Analysis complete • 6 perfect matches found</span>
+                </p>
+                <div style="display: flex; justify-content: center; gap: var(--spacing-xl); flex-wrap: wrap; margin-top: var(--spacing-md);">
+                    <div>
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--accent-purple);" id="match-percentage">87%</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Avg Match</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--accent-blue);" id="genres-analyzed">4</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Genres</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 1.5rem; font-weight: 600; color: var(--accent-gold);" id="database-scanned">847</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">Movies Analyzed</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Perfect Matches -->
@@ -1558,81 +1960,202 @@
                 </div>
             </div>
 
-            <!-- More Recommendations -->
-            <div class="more-recommendations">
-                <h3 class="mb-lg" style="text-align: center;">More Great Options</h3>
-                
-                <div class="movie-grid">
-                    <!-- Additional sample cards -->
-                    <div class="movie-card glass glass-hover fade-in">
-                        <div class="movie-poster">
-                            <div class="match-score">89%</div>
-                            <div style="background: var(--bg-tertiary); height: 100%; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3; color: var(--text-muted);"></i>
-                            </div>
-                            <div class="movie-overlay">
-                                <div class="movie-title">Her</div>
-                                <div class="movie-info">
-                                    <span>2013 • Drama</span>
-                                    <div class="movie-rating">
-                                        <i class="fas fa-star" style="color: var(--accent-gold);"></i>
-                                        <span>8.0</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <!-- Error State -->
+            <div class="error-state" id="recommendations-error" style="display: none; text-align: center; padding: var(--spacing-2xl); background: var(--bg-glass); border-radius: var(--radius-lg); border: 1px solid rgba(255, 107, 107, 0.3);">
+                <div style="font-size: 3rem; color: #ff6b6b; margin-bottom: var(--spacing-lg);">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 style="color: #ff6b6b; margin-bottom: var(--spacing-md);">Oops! Something went wrong</h3>
+                <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                    We couldn't generate your recommendations right now. This might be due to a network issue or temporary service interruption.
+                </p>
+                <div style="display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary" id="retry-recommendations-btn">
+                        <i class="fas fa-redo"></i>
+                        Try Again
+                    </button>
+                    <button class="btn btn-secondary" id="fallback-recommendations-btn">
+                        <i class="fas fa-star"></i>
+                        Show Popular Movies
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Sharing Modal -->
+        <div class="modal" id="share-modal" style="display: none;">
+            <div class="modal-overlay" id="share-modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Share Your Movie Recommendations</h3>
+                    <button class="modal-close" id="share-modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg);">
+                        Share your personalized movie recommendations with friends!
+                    </p>
+                    
+                    <div class="share-options">
+                        <button class="share-btn" data-platform="twitter">
+                            <i class="fab fa-twitter" style="color: #1da1f2;"></i>
+                            <span>Share on Twitter</span>
+                        </button>
+                        <button class="share-btn" data-platform="facebook">
+                            <i class="fab fa-facebook" style="color: #4267b2;"></i>
+                            <span>Share on Facebook</span>
+                        </button>
+                        <button class="share-btn" data-platform="whatsapp">
+                            <i class="fab fa-whatsapp" style="color: #25d366;"></i>
+                            <span>Share on WhatsApp</span>
+                        </button>
+                        <button class="share-btn" data-platform="copy">
+                            <i class="fas fa-copy" style="color: var(--accent-purple);"></i>
+                            <span>Copy Link</span>
+                        </button>
                     </div>
 
-                    <div class="movie-card glass glass-hover fade-in">
-                        <div class="movie-poster">
-                            <div class="match-score">87%</div>
-                            <div style="background: var(--bg-tertiary); height: 100%; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3; color: var(--text-muted);"></i>
-                            </div>
-                            <div class="movie-overlay">
-                                <div class="movie-title">Lost in Translation</div>
-                                <div class="movie-info">
-                                    <span>2003 • Drama</span>
-                                    <div class="movie-rating">
-                                        <i class="fas fa-star" style="color: var(--accent-gold);"></i>
-                                        <span>7.7</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="movie-card glass glass-hover fade-in">
-                        <div class="movie-poster">
-                            <div class="match-score">85%</div>
-                            <div style="background: var(--bg-tertiary); height: 100%; display: flex; align-items: center; justify-content: center;">
-                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3; color: var(--text-muted);"></i>
-                            </div>
-                            <div class="movie-overlay">
-                                <div class="movie-title">The Royal Tenenbaums</div>
-                                <div class="movie-info">
-                                    <span>2001 • Comedy</span>
-                                    <div class="movie-rating">
-                                        <i class="fas fa-star" style="color: var(--accent-gold);"></i>
-                                        <span>7.6</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div style="margin-top: var(--spacing-lg); padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                        <p style="font-size: 0.9rem; color: var(--text-muted); text-align: center;">
+                            <i class="fas fa-lightbulb"></i>
+                            Your friends can use this link to see your movie taste and get their own recommendations!
+                        </p>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Action Buttons -->
-            <div class="text-center" style="margin-top: var(--spacing-2xl);">
-                <button class="btn btn-primary btn-large" style="margin-right: var(--spacing-md);">
-                    <i class="fas fa-redo"></i>
-                    Get More Recommendations
-                </button>
-                <button class="btn btn-secondary btn-large">
-                    <i class="fas fa-sliders-h"></i>
-                    Refine Preferences
-                </button>
+        <!-- Watchlist Modal -->
+        <div class="modal" id="watchlist-modal" style="display: none;">
+            <div class="modal-overlay" id="watchlist-modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Your Movie Watchlist</h3>
+                    <button class="modal-close" id="watchlist-modal-close" aria-label="Close watchlist">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="watchlist-content">
+                        <!-- Watchlist items will be populated here -->
+                    </div>
+                    <div id="watchlist-empty" style="display: none; text-align: center; padding: var(--spacing-xl); color: var(--text-secondary);">
+                        <i class="fas fa-bookmark" style="font-size: 3rem; margin-bottom: var(--spacing-md); opacity: 0.3;"></i>
+                        <p>Your watchlist is empty</p>
+                        <p style="font-size: 0.9rem;">Start adding movies from your recommendations!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About/Help Modal -->
+        <div class="modal" id="about-modal" style="display: none;">
+            <div class="modal-overlay" id="about-modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>About PopChoice</h3>
+                    <button class="modal-close" id="about-modal-close" aria-label="Close about dialog">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div style="margin-bottom: var(--spacing-lg);">
+                        <h4 style="color: var(--accent-gold); margin-bottom: var(--spacing-sm);">🎬 How It Works</h4>
+                        <p style="color: var(--text-secondary); line-height: 1.6;">
+                            PopChoice uses advanced AI algorithms to analyze your preferences across multiple dimensions: 
+                            mood, genres, era, runtime, content intensity, and personal taste in romance, action, and emotional depth.
+                        </p>
+                    </div>
+                    
+                    <div style="margin-bottom: var(--spacing-lg);">
+                        <h4 style="color: var(--accent-purple); margin-bottom: var(--spacing-sm);">✨ Features</h4>
+                        <ul style="color: var(--text-secondary); line-height: 1.8; padding-left: var(--spacing-lg);">
+                            <li>Personalized AI-powered recommendations</li>
+                            <li>Advanced preference analysis</li>
+                            <li>Watchlist and favorites management</li>
+                            <li>Social sharing capabilities</li>
+                            <li>Quick mood-based suggestions</li>
+                            <li>Surprise discovery feature</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: var(--spacing-lg);">
+                        <h4 style="color: var(--accent-blue); margin-bottom: var(--spacing-sm);">⌨️ Keyboard Shortcuts</h4>
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: var(--spacing-sm); color: var(--text-secondary); font-size: 0.9rem;">
+                            <kbd style="background: var(--bg-tertiary); padding: 2px 6px; border-radius: 4px;">Space</kbd>
+                            <span>Next step / Continue</span>
+                            <kbd style="background: var(--bg-tertiary); padding: 2px 6px; border-radius: 4px;">Escape</kbd>
+                            <span>Close modal / Go back</span>
+                            <kbd style="background: var(--bg-tertiary); padding: 2px 6px; border-radius: 4px;">Enter</kbd>
+                            <span>Select option</span>
+                            <kbd style="background: var(--bg-tertiary); padding: 2px 6px; border-radius: 4px;">?</kbd>
+                            <span>Show this help</span>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; padding: var(--spacing-md); background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">
+                            <i class="fas fa-heart" style="color: var(--accent-gold);"></i>
+                            Made with love for movie enthusiasts
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Modal -->
+        <div class="modal" id="feedback-modal" style="display: none;">
+            <div class="modal-overlay" id="feedback-modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Help Us Improve</h3>
+                    <button class="modal-close" id="feedback-modal-close" aria-label="Close feedback form">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="feedback-form">
+                        <div style="margin-bottom: var(--spacing-lg);">
+                            <label for="feedback-rating" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">
+                                How would you rate your experience?
+                            </label>
+                            <div class="rating-stars" id="feedback-rating" role="radiogroup" aria-label="Rating">
+                                <button type="button" class="star-btn" data-rating="1" aria-label="1 star">⭐</button>
+                                <button type="button" class="star-btn" data-rating="2" aria-label="2 stars">⭐</button>
+                                <button type="button" class="star-btn" data-rating="3" aria-label="3 stars">⭐</button>
+                                <button type="button" class="star-btn" data-rating="4" aria-label="4 stars">⭐</button>
+                                <button type="button" class="star-btn" data-rating="5" aria-label="5 stars">⭐</button>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: var(--spacing-lg);">
+                            <label for="feedback-text" style="display: block; margin-bottom: var(--spacing-sm); font-weight: 500;">
+                                What could we improve?
+                            </label>
+                            <textarea 
+                                id="feedback-text" 
+                                rows="4" 
+                                placeholder="Tell us about your experience, suggestions, or any issues you encountered..."
+                                style="width: 100%; padding: var(--spacing-md); border: 1px solid var(--border-glass); border-radius: var(--radius-md); background: var(--bg-glass); color: var(--text-primary); font-family: var(--font-primary); resize: vertical;"
+                                aria-describedby="feedback-help"
+                            ></textarea>
+                            <small id="feedback-help" style="color: var(--text-muted); font-size: 0.8rem;">
+                                Your feedback helps us make PopChoice better for everyone.
+                            </small>
+                        </div>
+
+                        <div style="display: flex; gap: var(--spacing-md); justify-content: flex-end;">
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('feedback-modal')">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i>
+                                Send Feedback
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </section>
@@ -1648,12 +2171,836 @@
                 era: 2010,
                 runtime: null,
                 intensity: null,
-                favoritePeople: [],
+                selectedPeople: [],
                 romance: 5,
                 action: 5,
                 emotion: 5
             },
-            isTransitioning: false
+            isTransitioning: false,
+            currentRecommendations: [],
+            watchlist: JSON.parse(localStorage.getItem('popChoiceWatchlist') || '[]'),
+            favorites: JSON.parse(localStorage.getItem('popChoiceFavorites') || '[]'),
+            recentlyWatched: JSON.parse(localStorage.getItem('popChoiceWatched') || '[]'),
+            currentEngine: 'ai', // 'ai', 'collaborative', 'content', 'hybrid'
+            moodProfiles: {
+                adventurous: { genres: ['Action', 'Adventure', 'Sci-Fi'], intensity: 8 },
+                romantic: { genres: ['Romance', 'Drama', 'Comedy'], intensity: 6 },
+                thrilling: { genres: ['Thriller', 'Horror', 'Mystery'], intensity: 9 },
+                comedic: { genres: ['Comedy', 'Family', 'Animation'], intensity: 4 },
+                dramatic: { genres: ['Drama', 'Biography', 'History'], intensity: 7 },
+                nostalgic: { genres: ['Family', 'Animation', 'Musical'], intensity: 5 },
+                cerebral: { genres: ['Sci-Fi', 'Mystery', 'Documentary'], intensity: 6 }
+            },
+            analytics: {
+                sessionStart: Date.now(),
+                completedSteps: 0,
+                preferences: {},
+                interactions: [],
+                timeSpentPerStep: {},
+                errors: [],
+                feedbackSubmitted: false,
+                engineUsage: { ai: 0, collaborative: 0, content: 0, hybrid: 0 },
+                recommendationsViewed: 0,
+                socialShares: 0
+            },
+            performance: {
+                recommendationTime: 0,
+                loadingSteps: [],
+                initialLoadTime: Date.now(),
+                fps: 60,
+                memoryUsage: 0,
+                lazyLoadedImages: 0
+            },
+            accessibility: {
+                keyboardUser: false,
+                highContrast: localStorage.getItem('popChoiceHighContrast') === 'true',
+                reducedMotion: localStorage.getItem('popChoiceReducedMotion') === 'true',
+                fontSize: localStorage.getItem('popChoiceFontSize') || 'normal',
+                announcements: []
+            },
+            cache: {
+                recommendations: new Map(),
+                similarMovies: new Map()
+            }
+        };
+
+        // ==================== ACCESSIBILITY SYSTEM ==================== 
+        const Accessibility = {
+            init() {
+                this.detectPreferences();
+                this.setupKeyboardNavigation();
+                this.setupScreenReaderSupport();
+                this.setupFocusManagement();
+            },
+
+            detectPreferences() {
+                // Detect reduced motion preference
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    AppState.accessibility.reducedMotion = true;
+                    document.documentElement.classList.add('reduced-motion');
+                }
+
+                // Detect high contrast preference
+                if (window.matchMedia('(prefers-contrast: high)').matches) {
+                    AppState.accessibility.highContrast = true;
+                    document.documentElement.classList.add('high-contrast');
+                }
+
+                // Listen for preference changes
+                window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
+                    AppState.accessibility.reducedMotion = e.matches;
+                    document.documentElement.classList.toggle('reduced-motion', e.matches);
+                });
+            },
+
+            setupKeyboardNavigation() {
+                document.addEventListener('keydown', (e) => {
+                    // Detect keyboard usage
+                    if (!AppState.accessibility.keyboardUser && e.key === 'Tab') {
+                        AppState.accessibility.keyboardUser = true;
+                        document.body.classList.add('keyboard-user');
+                    }
+
+                    // Global keyboard shortcuts
+                    switch (e.key) {
+                        case 'Escape':
+                            this.handleEscape();
+                            break;
+                        case '?':
+                            if (e.shiftKey) {
+                                e.preventDefault();
+                                openModal('about-modal');
+                                Analytics.trackEvent('help_opened_keyboard');
+                            }
+                            break;
+                        case ' ':
+                            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                                e.preventDefault();
+                                this.handleSpaceNavigation();
+                            }
+                            break;
+                        case 'Enter':
+                            if (e.target.classList.contains('movie-card')) {
+                                e.preventDefault();
+                                e.target.click();
+                            }
+                            break;
+                    }
+                });
+
+                // Remove keyboard indicator on mouse use
+                document.addEventListener('mousedown', () => {
+                    document.body.classList.remove('keyboard-user');
+                });
+            },
+
+            setupScreenReaderSupport() {
+                // Live region for dynamic content announcements
+                const liveRegion = document.createElement('div');
+                liveRegion.setAttribute('aria-live', 'polite');
+                liveRegion.setAttribute('aria-atomic', 'true');
+                liveRegion.style.position = 'absolute';
+                liveRegion.style.left = '-10000px';
+                liveRegion.style.width = '1px';
+                liveRegion.style.height = '1px';
+                liveRegion.style.overflow = 'hidden';
+                liveRegion.id = 'sr-live-region';
+                document.body.appendChild(liveRegion);
+            },
+
+            setupFocusManagement() {
+                // Trap focus in modals
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Tab') {
+                        const modal = document.querySelector('.modal[style*="flex"]');
+                        if (modal) {
+                            this.trapFocus(e, modal);
+                        }
+                    }
+                });
+            },
+
+            trapFocus(event, container) {
+                const focusableElements = container.querySelectorAll(
+                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                );
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+
+                if (event.shiftKey && document.activeElement === firstElement) {
+                    event.preventDefault();
+                    lastElement.focus();
+                } else if (!event.shiftKey && document.activeElement === lastElement) {
+                    event.preventDefault();
+                    firstElement.focus();
+                }
+            },
+
+            handleEscape() {
+                const openModal = document.querySelector('.modal[style*="flex"]');
+                if (openModal) {
+                    const modalId = openModal.id;
+                    closeModal(modalId);
+                    Analytics.trackEvent('modal_closed_keyboard', { modalId });
+                }
+            },
+
+            handleSpaceNavigation() {
+                if (AppState.currentStep < AppState.totalSteps && elements.nextBtn.style.display !== 'none') {
+                    elements.nextBtn.click();
+                } else if (AppState.currentStep === AppState.totalSteps && elements.finishBtn.style.display !== 'none') {
+                    elements.finishBtn.click();
+                }
+            },
+
+            announce(message) {
+                const liveRegion = document.getElementById('sr-live-region');
+                if (liveRegion) {
+                    liveRegion.textContent = message;
+                }
+            }
+        };
+
+        // ==================== PERFORMANCE OPTIMIZATION SYSTEM ==================== 
+        const Performance = {
+            init() {
+                this.setupLazyLoading();
+                this.setupImageOptimization();
+                this.setupMemoryManagement();
+                this.monitorPerformance();
+            },
+
+            setupLazyLoading() {
+                // Lazy load movie posters
+                const imageObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            img.classList.remove('lazy');
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                });
+
+                // Observe all lazy images
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            },
+
+            setupImageOptimization() {
+                // Preload critical images
+                const criticalImages = [
+                    'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"/>' // Placeholder
+                ];
+
+                criticalImages.forEach(src => {
+                    const img = new Image();
+                    img.src = src;
+                });
+            },
+
+            setupMemoryManagement() {
+                // Clean up old data periodically
+                setInterval(() => {
+                    this.cleanupCache();
+                    this.cleanupAnalytics();
+                }, 300000); // Every 5 minutes
+            },
+
+            cleanupCache() {
+                // Limit cache size
+                if (AppState.cache.recommendations.size > 50) {
+                    const entries = Array.from(AppState.cache.recommendations.entries());
+                    const toKeep = entries.slice(-25);
+                    AppState.cache.recommendations.clear();
+                    toKeep.forEach(([key, value]) => {
+                        AppState.cache.recommendations.set(key, value);
+                    });
+                }
+
+                if (AppState.cache.similarMovies.size > 100) {
+                    const entries = Array.from(AppState.cache.similarMovies.entries());
+                    const toKeep = entries.slice(-50);
+                    AppState.cache.similarMovies.clear();
+                    toKeep.forEach(([key, value]) => {
+                        AppState.cache.similarMovies.set(key, value);
+                    });
+                }
+            },
+
+            cleanupAnalytics() {
+                // Limit analytics data
+                if (AppState.analytics.interactions.length > 1000) {
+                    AppState.analytics.interactions = AppState.analytics.interactions.slice(-500);
+                }
+            },
+
+            monitorPerformance() {
+                // Monitor page load time
+                window.addEventListener('load', () => {
+                    const loadTime = Date.now() - AppState.performance.initialLoadTime;
+                    Analytics.trackEvent('page_load_complete', { loadTime });
+                });
+
+                // Monitor frame rate
+                let frameCount = 0;
+                let lastTime = performance.now();
+                
+                const countFPS = () => {
+                    frameCount++;
+                    const currentTime = performance.now();
+                    
+                    if (currentTime >= lastTime + 1000) {
+                        const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+                        if (fps < 30) {
+                            Analytics.trackEvent('performance_low_fps', { fps });
+                        }
+                        frameCount = 0;
+                        lastTime = currentTime;
+                    }
+                    
+                    requestAnimationFrame(countFPS);
+                };
+                
+                requestAnimationFrame(countFPS);
+            }
+        };
+
+        // ==================== ADVANCED RECOMMENDATION ENGINES ==================== 
+        const RecommendationEngines = {
+            // Original AI-powered engine
+            aiEngine: generateRecommendations,
+
+            // Alternative collaborative filtering engine
+            collaborativeEngine(formData) {
+                const userProfile = this.createUserProfile(formData);
+                const similarities = MOVIE_DATABASE.map(movie => ({
+                    movie,
+                    score: this.calculateCollaborativeSimilarity(userProfile, movie),
+                    confidence: 'Medium',
+                    explanation: 'Based on similar user preferences'
+                }));
+
+                return similarities
+                    .sort((a, b) => b.score - a.score)
+                    .slice(0, 8);
+            },
+
+            // Content-based filtering engine
+            contentEngine(formData) {
+                const scoredMovies = MOVIE_DATABASE.map(movie => {
+                    const score = this.calculateContentSimilarity(formData, movie);
+                    return {
+                        movie,
+                        score,
+                        confidence: score > 0.7 ? 'High' : score > 0.4 ? 'Medium' : 'Low',
+                        explanation: this.generateContentExplanation(formData, movie)
+                    };
+                });
+
+                return scoredMovies
+                    .sort((a, b) => b.score - a.score)
+                    .slice(0, 8);
+            },
+
+            // Hybrid engine combining multiple approaches
+            hybridEngine(formData) {
+                const aiResults = this.aiEngine(formData);
+                const collaborativeResults = this.collaborativeEngine(formData);
+                const contentResults = this.contentEngine(formData);
+
+                // Combine and weight results
+                const combined = this.combineResults([
+                    { results: aiResults, weight: 0.5 },
+                    { results: collaborativeResults, weight: 0.3 },
+                    { results: contentResults, weight: 0.2 }
+                ]);
+
+                return combined.slice(0, 6);
+            },
+
+            createUserProfile(formData) {
+                return {
+                    mood: formData.mood,
+                    preferredGenres: formData.genres,
+                    eraPreference: formData.era,
+                    runtimePreference: formData.runtime,
+                    intensityTolerance: formData.intensity,
+                    romanceLevel: formData.romance,
+                    actionLevel: formData.action,
+                    emotionalDepth: formData.emotion
+                };
+            },
+
+            calculateCollaborativeSimilarity(userProfile, movie) {
+                // Simulate collaborative filtering based on movie characteristics
+                let score = 0;
+                
+                // Genre matching
+                if (userProfile.preferredGenres.some(g => movie.genres.includes(g))) {
+                    score += 0.3;
+                }
+                
+                // Mood compatibility
+                if (movie.mood.includes(userProfile.mood)) {
+                    score += 0.25;
+                }
+                
+                // Era preference
+                const eraDiff = Math.abs(movie.year - userProfile.eraPreference);
+                score += 0.15 * Math.max(0, 1 - eraDiff / 50);
+                
+                // Preference levels
+                score += 0.1 * (1 - Math.abs(userProfile.romanceLevel - movie.romanceLevel) / 10);
+                score += 0.1 * (1 - Math.abs(userProfile.actionLevel - movie.actionLevel) / 10);
+                score += 0.1 * (1 - Math.abs(userProfile.emotionalDepth - movie.emotionalIntensity) / 10);
+
+                return Math.min(score, 1);
+            },
+
+            calculateContentSimilarity(formData, movie) {
+                // Content-based similarity calculation
+                let score = 0;
+                
+                // Direct attribute matching
+                if (formData.genres.some(g => movie.genres.includes(g))) {
+                    score += 0.4;
+                }
+                
+                if (movie.mood.includes(formData.mood)) {
+                    score += 0.3;
+                }
+                
+                // Runtime preference
+                const runtimeMatch = this.getRuntimeMatch(formData.runtime, movie.runtime);
+                score += 0.15 * runtimeMatch;
+                
+                // Rating quality bonus
+                if (movie.rating >= 8.0) {
+                    score += 0.15;
+                }
+
+                return Math.min(score, 1);
+            },
+
+            getRuntimeMatch(preference, actual) {
+                switch (preference) {
+                    case 'short': return actual < 90 ? 1 : 0.5;
+                    case 'medium': return (actual >= 90 && actual < 150) ? 1 : 0.5;
+                    case 'long': return actual >= 150 ? 1 : 0.5;
+                    default: return 0.7;
+                }
+            },
+
+            generateContentExplanation(formData, movie) {
+                const reasons = [];
+                
+                if (formData.genres.some(g => movie.genres.includes(g))) {
+                    reasons.push(`Matches your ${formData.genres.join(' & ')} preferences`);
+                }
+                
+                if (movie.mood.includes(formData.mood)) {
+                    reasons.push(`Perfect for your ${formData.mood} mood`);
+                }
+                
+                if (movie.rating >= 8.5) {
+                    reasons.push(`Critically acclaimed (${movie.rating}/10)`);
+                }
+
+                return reasons.slice(0, 2).join(' • ') || 'Great choice for you';
+            },
+
+            combineResults(engineResults) {
+                const movieScores = new Map();
+                
+                engineResults.forEach(({ results, weight }) => {
+                    results.forEach((rec, index) => {
+                        const movieId = rec.movie.id;
+                        const positionWeight = 1 - (index / results.length * 0.5); // Higher weight for better positions
+                        const weightedScore = rec.score * weight * positionWeight;
+                        
+                        if (movieScores.has(movieId)) {
+                            const existing = movieScores.get(movieId);
+                            existing.totalScore += weightedScore;
+                            existing.count += 1;
+                        } else {
+                            movieScores.set(movieId, {
+                                movie: rec.movie,
+                                totalScore: weightedScore,
+                                count: 1,
+                                explanations: [rec.explanation]
+                            });
+                        }
+                    });
+                });
+
+                // Convert to final results
+                return Array.from(movieScores.values())
+                    .map(item => ({
+                        movie: item.movie,
+                        score: item.totalScore / item.count,
+                        confidence: item.totalScore > 0.6 ? 'High' : 'Medium',
+                        explanation: item.explanations[0]
+                    }))
+                    .sort((a, b) => b.score - a.score);
+            }
+        };
+
+        // ==================== PREMIUM FEATURES MODULE ==================== 
+        const PremiumFeatures = {
+            generateSurpriseRecommendation() {
+                const qualityMovies = MOVIE_DATABASE.filter(movie => 
+                    movie.rating >= 7.5 && !this.isRecentlyWatched(movie.id)
+                );
+
+                const randomMovie = qualityMovies.length > 0 
+                    ? qualityMovies[Math.floor(Math.random() * qualityMovies.length)]
+                    : MOVIE_DATABASE[Math.floor(Math.random() * MOVIE_DATABASE.length)];
+                
+                return {
+                    movie: randomMovie,
+                    score: 0.8 + Math.random() * 0.2,
+                    confidence: 'High',
+                    explanation: `🎲 Surprise pick! This ${randomMovie.year} ${randomMovie.genres[0]} film is perfect for discovering something new.`
+                };
+            },
+
+            generateMoodQuickPicks(mood) {
+                const targetMood = mood || AppState.formData.mood || 'thoughtful';
+                const moodProfile = AppState.moodProfiles[targetMood];
+                
+                return MOVIE_DATABASE
+                    .filter(movie => !this.isRecentlyWatched(movie.id))
+                    .map(movie => ({
+                        movie,
+                        score: this.calculateMoodScore(movie, targetMood),
+                        confidence: 'High',
+                        explanation: `Perfect for your ${targetMood} mood!`
+                    }))
+                    .sort((a, b) => b.score - a.score)
+                    .slice(0, 4);
+            },
+
+            calculateMoodScore(movie, mood) {
+                const moodProfile = AppState.moodProfiles[mood];
+                if (!moodProfile) return movie.rating / 10;
+                
+                let score = 0;
+                const genreMatches = movie.genres.filter(g => 
+                    moodProfile.genres.some(mg => mg.toLowerCase() === g.toLowerCase())
+                ).length;
+                score += (genreMatches / moodProfile.genres.length) * 0.4;
+                score += (movie.rating / 10) * 0.6;
+                return Math.min(1, score);
+            },
+
+            isRecentlyWatched(movieId) {
+                return AppState.recentlyWatched.includes(movieId);
+            },
+
+            markAsWatched(movieId) {
+                if (!this.isRecentlyWatched(movieId)) {
+                    AppState.recentlyWatched.unshift(movieId);
+                    if (AppState.recentlyWatched.length > 50) {
+                        AppState.recentlyWatched = AppState.recentlyWatched.slice(0, 50);
+                    }
+                    localStorage.setItem('popChoiceWatched', JSON.stringify(AppState.recentlyWatched));
+                }
+            },
+
+            openWatchlistModal() {
+                this.renderWatchlist();
+                openModal('watchlist-modal');
+            },
+
+            renderWatchlist() {
+                const content = document.getElementById('watchlist-content');
+                if (!content) return;
+
+                if (AppState.watchlist.length === 0) {
+                    content.innerHTML = '<div style="text-align: center; padding: 2rem;"><h4>Your watchlist is empty</h4><p>Start adding movies!</p></div>';
+                    return;
+                }
+
+                content.innerHTML = AppState.watchlist.map(item => `
+                    <div class="watchlist-item">
+                        <h4>${item.title}</h4>
+                        <p>${item.year} • ⭐ ${item.rating}</p>
+                        <button onclick="PremiumFeatures.markAsWatched(${item.movieId})">Mark Watched</button>
+                    </div>
+                `).join('');
+            }
+        };
+
+        // ==================== ANALYTICS SYSTEM ==================== 
+        const Analytics = {
+            trackEvent(eventName, data = {}) {
+                const event = {
+                    timestamp: Date.now(),
+                    event: eventName,
+                    data: data,
+                    sessionTime: Date.now() - AppState.analytics.sessionStart
+                };
+                
+                AppState.analytics.interactions.push(event);
+                console.log('📊 Analytics:', eventName, data);
+                
+                // In a real app, send to analytics service
+                // this.sendToAnalytics(event);
+            },
+
+            trackStepCompletion(step, timeSpent) {
+                AppState.analytics.timeSpentPerStep[step] = timeSpent;
+                AppState.analytics.completedSteps = Math.max(AppState.analytics.completedSteps, step);
+                
+                this.trackEvent('step_completed', {
+                    step: step,
+                    timeSpent: timeSpent,
+                    totalSteps: AppState.totalSteps
+                });
+            },
+
+            trackError(error, context) {
+                const errorEvent = {
+                    timestamp: Date.now(),
+                    error: error.message || error,
+                    context: context,
+                    stack: error.stack
+                };
+                
+                AppState.analytics.errors.push(errorEvent);
+                this.trackEvent('error_occurred', errorEvent);
+            },
+
+            trackRecommendationGeneration(success, timeTaken, resultCount) {
+                this.trackEvent('recommendations_generated', {
+                    success: success,
+                    timeTaken: timeTaken,
+                    resultCount: resultCount,
+                    preferences: { ...AppState.formData }
+                });
+            },
+
+            getSessionSummary() {
+                const totalTime = Date.now() - AppState.analytics.sessionStart;
+                const averageStepTime = Object.values(AppState.analytics.timeSpentPerStep).reduce((a, b) => a + b, 0) / AppState.analytics.completedSteps;
+                
+                return {
+                    totalSessionTime: totalTime,
+                    completedSteps: AppState.analytics.completedSteps,
+                    averageStepTime: averageStepTime,
+                    totalInteractions: AppState.analytics.interactions.length,
+                    errors: AppState.analytics.errors.length,
+                    preferences: AppState.formData
+                };
+            }
+        };
+
+        // ==================== ENHANCED LOADING MANAGER ==================== 
+        const LoadingManager = {
+            steps: [
+                { id: 'analyzing', text: 'Analyzing your preferences', duration: 800 },
+                { id: 'searching', text: 'Searching movie database', duration: 1200 },
+                { id: 'calculating', text: 'Calculating compatibility scores', duration: 1500 },
+                { id: 'ranking', text: 'Ranking recommendations', duration: 1000 },
+                { id: 'finalizing', text: 'Finalizing your matches', duration: 800 }
+            ],
+            
+            currentStep: 0,
+            startTime: 0,
+            
+            start() {
+                this.startTime = Date.now();
+                this.currentStep = 0;
+                const progressBar = document.querySelector('.loading-progress-bar');
+                if (progressBar) progressBar.style.width = '0%';
+                
+                Analytics.trackEvent('loading_started');
+                this.processNextStep();
+            },
+            
+            processNextStep() {
+                const steps = document.querySelectorAll('.loading-steps li');
+                
+                if (this.currentStep > 0) {
+                    steps[this.currentStep - 1].classList.remove('active');
+                    steps[this.currentStep - 1].classList.add('completed');
+                }
+                
+                if (this.currentStep < this.steps.length) {
+                    const step = this.steps[this.currentStep];
+                    steps[this.currentStep].classList.add('active');
+                    
+                    // Update progress bar
+                    const progress = ((this.currentStep + 1) / this.steps.length) * 100;
+                    const progressBar = document.querySelector('.loading-progress-bar');
+                    if (progressBar) {
+                        progressBar.style.width = `${progress}%`;
+                    }
+                    
+                    // Execute step-specific logic
+                    this.executeStepLogic(step);
+                    
+                    setTimeout(() => {
+                        this.currentStep++;
+                        this.processNextStep();
+                    }, step.duration);
+                } else {
+                    // All steps complete
+                    const totalTime = Date.now() - this.startTime;
+                    Analytics.trackEvent('loading_completed', { totalTime });
+                    this.onLoadingComplete();
+                }
+            },
+            
+            executeStepLogic(step) {
+                switch (step.id) {
+                    case 'analyzing':
+                        Analytics.trackEvent('preferences_analyzed', AppState.formData);
+                        break;
+                    case 'searching':
+                        Analytics.trackEvent('database_searched', { 
+                            totalMovies: MOVIE_DATABASE.length 
+                        });
+                        break;
+                    case 'calculating':
+                        // Generate recommendations during this step
+                        try {
+                            AppState.currentRecommendations = generateRecommendations(AppState.formData);
+                            Analytics.trackRecommendationGeneration(true, Date.now() - this.startTime, AppState.currentRecommendations.length);
+                        } catch (error) {
+                            Analytics.trackError(error, 'recommendation_generation');
+                            AppState.currentRecommendations = getFallbackRecommendations();
+                        }
+                        break;
+                    case 'ranking':
+                        // Apply diversity and final ranking
+                        if (AppState.currentRecommendations.length > 0) {
+                            AppState.currentRecommendations = injectDiversity(AppState.currentRecommendations);
+                        }
+                        break;
+                    case 'finalizing':
+                        // Prepare final display data
+                        this.updateAnalyticsDisplay();
+                        break;
+                }
+            },
+            
+            updateAnalyticsDisplay() {
+                const recommendations = AppState.currentRecommendations;
+                if (recommendations.length === 0) return;
+                
+                const avgMatch = Math.round(recommendations.reduce((sum, rec) => sum + rec.score, 0) / recommendations.length * 100);
+                const uniqueGenres = new Set();
+                recommendations.forEach(rec => rec.movie.genres.forEach(g => uniqueGenres.add(g)));
+                
+                document.getElementById('match-percentage').textContent = `${avgMatch}%`;
+                document.getElementById('genres-analyzed').textContent = uniqueGenres.size;
+                document.getElementById('database-scanned').textContent = MOVIE_DATABASE.length;
+                document.getElementById('analytics-text').textContent = `Analysis complete • ${recommendations.length} perfect matches found`;
+            },
+            
+            onLoadingComplete() {
+                setTimeout(() => {
+                    elements.loadingSection.style.display = 'none';
+                    elements.resultsSection.style.display = 'block';
+                    
+                    if (AppState.currentRecommendations.length > 0) {
+                        displayRecommendations(AppState.currentRecommendations);
+                        document.getElementById('recommendations-error').style.display = 'none';
+                    } else {
+                        this.showError();
+                    }
+                    
+                    elements.restartBtn.style.display = 'inline-flex';
+                    Analytics.trackEvent('results_displayed');
+                }, 1000);
+            },
+            
+            showError() {
+                document.getElementById('recommendations-error').style.display = 'block';
+                document.querySelector('.perfect-matches').style.display = 'none';
+                Analytics.trackEvent('error_displayed', { type: 'recommendation_failure' });
+            }
+        };
+
+        // ==================== SOCIAL SHARING SYSTEM ==================== 
+        const SocialSharing = {
+            generateShareData() {
+                const topMovie = AppState.currentRecommendations[0];
+                const avgMatch = Math.round(AppState.currentRecommendations.reduce((sum, rec) => sum + rec.score, 0) / AppState.currentRecommendations.length * 100);
+                
+                return {
+                    title: `I just discovered my perfect movie matches with PopChoice AI!`,
+                    description: `My top recommendation: "${topMovie?.movie.title}" with a ${Math.round(topMovie?.score * 100)}% match! Average compatibility: ${avgMatch}%. Find your perfect movies too!`,
+                    url: window.location.href,
+                    hashtags: ['PopChoice', 'MovieRecommendations', 'AI', 'Movies']
+                };
+            },
+            
+            shareOnPlatform(platform) {
+                const shareData = this.generateShareData();
+                let shareUrl = '';
+                
+                switch (platform) {
+                    case 'twitter':
+                        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareData.title + ' ' + shareData.description)}&url=${encodeURIComponent(shareData.url)}&hashtags=${shareData.hashtags.join(',')}`;
+                        break;
+                    case 'facebook':
+                        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareData.url)}&quote=${encodeURIComponent(shareData.description)}`;
+                        break;
+                    case 'whatsapp':
+                        shareUrl = `https://wa.me/?text=${encodeURIComponent(shareData.title + ' ' + shareData.description + ' ' + shareData.url)}`;
+                        break;
+                    case 'copy':
+                        this.copyToClipboard(shareData);
+                        return;
+                }
+                
+                if (shareUrl) {
+                    window.open(shareUrl, '_blank', 'width=600,height=400');
+                    Analytics.trackEvent('shared', { platform });
+                    this.showToast('Shared successfully!', 'success');
+                }
+            },
+            
+            async copyToClipboard(shareData) {
+                const textToCopy = `${shareData.title}\n${shareData.description}\n${shareData.url}`;
+                
+                try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    this.showToast('Link copied to clipboard!', 'success');
+                    Analytics.trackEvent('shared', { platform: 'clipboard' });
+                } catch (err) {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = textToCopy;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    this.showToast('Link copied to clipboard!', 'success');
+                }
+            },
+            
+            showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `
+                    <div class="toast-content">
+                        <i class="toast-icon fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+            }
         };
 
         // ==================== DOM ELEMENTS ==================== 
@@ -1693,6 +3040,226 @@
             emotionSlider: document.getElementById('emotion-slider')
         };
 
+        // ==================== MOVIE DATABASE ==================== 
+        const MOVIE_DATABASE = [
+            {
+                id: 1,
+                title: "The Grand Budapest Hotel",
+                year: 2014,
+                genres: ["comedy", "drama", "adventure"],
+                director: "Wes Anderson",
+                actors: ["Ralph Fiennes", "F. Murray Abraham", "Mathieu Amalric"],
+                runtime: 99,
+                rating: 8.1,
+                poster: "https://m.media-amazon.com/images/M/MV5BMzM5NjUxOTEyMl5BMl5BanBnXkFtZTgwNjEyMDM0MDE@._V1_SX300.jpg",
+                mood: ["cheerful", "thoughtful", "nostalgic"],
+                romanceLevel: 3,
+                actionLevel: 2,
+                emotionalIntensity: 5,
+                contentRating: "R",
+                themes: ["friendship", "loyalty", "adventure", "comedy"],
+                description: "A legendary concierge at a famous European hotel takes a protégé under his wing."
+            },
+            {
+                id: 2,
+                title: "Inception",
+                year: 2010,
+                genres: ["sci-fi", "thriller", "action"],
+                director: "Christopher Nolan",
+                actors: ["Leonardo DiCaprio", "Marion Cotillard", "Tom Hardy"],
+                runtime: 148,
+                rating: 8.8,
+                poster: "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
+                mood: ["thoughtful", "curious", "energetic"],
+                romanceLevel: 4,
+                actionLevel: 8,
+                emotionalIntensity: 7,
+                contentRating: "PG-13",
+                themes: ["dreams", "reality", "love", "action"],
+                description: "A thief who enters people's dreams to steal secrets is given a final job."
+            },
+            {
+                id: 3,
+                title: "La La Land",
+                year: 2016,
+                genres: ["romance", "drama", "comedy"],
+                director: "Damien Chazelle",
+                actors: ["Ryan Gosling", "Emma Stone", "John Legend"],
+                runtime: 128,
+                rating: 8.0,
+                poster: "https://m.media-amazon.com/images/M/MV5BMzUzNDM2NzM2MV5BMl5BanBnXkFtZTgwNTM3NTg4OTE@._V1_SX300.jpg",
+                mood: ["romantic", "cheerful", "nostalgic"],
+                romanceLevel: 9,
+                actionLevel: 1,
+                emotionalIntensity: 8,
+                contentRating: "PG-13",
+                themes: ["love", "dreams", "music", "ambition"],
+                description: "A jazz musician and an aspiring actress fall in love in Los Angeles."
+            },
+            {
+                id: 4,
+                title: "Mad Max: Fury Road",
+                year: 2015,
+                genres: ["action", "adventure", "sci-fi"],
+                director: "George Miller",
+                actors: ["Tom Hardy", "Charlize Theron", "Nicholas Hoult"],
+                runtime: 120,
+                rating: 8.1,
+                poster: "https://m.media-amazon.com/images/M/MV5BN2EwM2I5OWMtMGQyMi00Zjg1LWJkNTctZTdjYTA4OGUwZjMyXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg",
+                mood: ["energetic", "adventurous"],
+                romanceLevel: 2,
+                actionLevel: 10,
+                emotionalIntensity: 6,
+                contentRating: "R",
+                themes: ["survival", "rebellion", "action", "desert"],
+                description: "In a post-apocalyptic world, a woman rebels against a tyrannical ruler."
+            },
+            {
+                id: 5,
+                title: "Her",
+                year: 2013,
+                genres: ["drama", "romance", "sci-fi"],
+                director: "Spike Jonze",
+                actors: ["Joaquin Phoenix", "Scarlett Johansson", "Amy Adams"],
+                runtime: 126,
+                rating: 8.0,
+                poster: "https://m.media-amazon.com/images/M/MV5BMjA1Nzk0OTM2OF5BMl5BanBnXkFtZTgwNjU2NjEwMDE@._V1_SX300.jpg",
+                mood: ["thoughtful", "romantic", "curious"],
+                romanceLevel: 8,
+                actionLevel: 1,
+                emotionalIntensity: 9,
+                contentRating: "R",
+                themes: ["technology", "love", "loneliness", "future"],
+                description: "A man develops a relationship with an artificially intelligent operating system."
+            },
+            {
+                id: 6,
+                title: "Parasite",
+                year: 2019,
+                genres: ["thriller", "drama", "comedy"],
+                director: "Bong Joon-ho",
+                actors: ["Song Kang-ho", "Lee Sun-kyun", "Cho Yeo-jeong"],
+                runtime: 132,
+                rating: 8.6,
+                poster: "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
+                mood: ["thoughtful", "curious"],
+                romanceLevel: 2,
+                actionLevel: 4,
+                emotionalIntensity: 8,
+                contentRating: "R",
+                themes: ["class", "deception", "family", "society"],
+                description: "A poor family schemes to become employed by a wealthy family."
+            },
+            {
+                id: 7,
+                title: "The Avengers",
+                year: 2012,
+                genres: ["action", "adventure", "sci-fi"],
+                director: "Joss Whedon",
+                actors: ["Robert Downey Jr.", "Chris Evans", "Scarlett Johansson"],
+                runtime: 143,
+                rating: 8.0,
+                poster: "https://m.media-amazon.com/images/M/MV5BNDYxNjQyMjAtNTdiOS00NGYwLWFmNTAtNThmYjU5ZGI2YTI1XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg",
+                mood: ["energetic", "adventurous", "cheerful"],
+                romanceLevel: 3,
+                actionLevel: 9,
+                emotionalIntensity: 6,
+                contentRating: "PG-13",
+                themes: ["teamwork", "heroism", "action", "friendship"],
+                description: "Earth's mightiest heroes must come together to stop an alien invasion."
+            },
+            {
+                id: 8,
+                title: "Moonlight",
+                year: 2016,
+                genres: ["drama"],
+                director: "Barry Jenkins",
+                actors: ["Mahershala Ali", "Naomie Harris", "Trevante Rhodes"],
+                runtime: 111,
+                rating: 7.4,
+                poster: "https://m.media-amazon.com/images/M/MV5BNzQxNTIyODAxMV5BMl5BanBnXkFtZTgwNzQyMDA3OTE@._V1_SX300.jpg",
+                mood: ["thoughtful", "romantic"],
+                romanceLevel: 6,
+                actionLevel: 1,
+                emotionalIntensity: 9,
+                contentRating: "R",
+                themes: ["identity", "love", "growing up", "self-discovery"],
+                description: "A young African-American man grapples with his identity and sexuality."
+            },
+            {
+                id: 9,
+                title: "John Wick",
+                year: 2014,
+                genres: ["action", "thriller"],
+                director: "Chad Stahelski",
+                actors: ["Keanu Reeves", "Michael Nyqvist", "Alfie Allen"],
+                runtime: 101,
+                rating: 7.4,
+                poster: "https://m.media-amazon.com/images/M/MV5BMTU2NjA1ODgzMF5BMl5BanBnXkFtZTgwMTM2MTI4MjE@._V1_SX300.jpg",
+                mood: ["energetic", "adventurous"],
+                romanceLevel: 2,
+                actionLevel: 10,
+                emotionalIntensity: 6,
+                contentRating: "R",
+                themes: ["revenge", "loss", "action", "underworld"],
+                description: "An ex-hit-man comes out of retirement to track down the gangsters that took everything from him."
+            },
+            {
+                id: 10,
+                title: "The Princess Bride",
+                year: 1987,
+                genres: ["adventure", "comedy", "romance"],
+                director: "Rob Reiner",
+                actors: ["Cary Elwes", "Robin Wright", "Mandy Patinkin"],
+                runtime: 98,
+                rating: 8.0,
+                poster: "https://m.media-amazon.com/images/M/MV5BMICM1NWNmMzMtMzQ5NS00NzQ3LWE0MzQtNzRlM2M1NmY1NGEzXkEyXkFqcGdeQXVyNzgxMzc3OTc@._V1_SX300.jpg",
+                mood: ["cheerful", "romantic", "adventurous"],
+                romanceLevel: 8,
+                actionLevel: 5,
+                emotionalIntensity: 6,
+                contentRating: "PG",
+                themes: ["love", "adventure", "fairy tale", "friendship"],
+                description: "A fairy tale adventure about a beautiful young woman and her one true love."
+            },
+            {
+                id: 11,
+                title: "Coco",
+                year: 2017,
+                genres: ["animation", "adventure", "comedy"],
+                director: "Lee Unkrich",
+                actors: ["Anthony Gonzalez", "Gael García Bernal", "Benjamin Bratt"],
+                runtime: 105,
+                rating: 8.4,
+                poster: "https://m.media-amazon.com/images/M/MV5BYjQ5NjM0Y2YtNjZkNC00ZDhkLWJjMWItN2QyNzFkMDE3ZjAxXkEyXkFqcGdeQXVyODIxMzk5NjA@._V1_SX300.jpg",
+                mood: ["cheerful", "nostalgic", "thoughtful"],
+                romanceLevel: 2,
+                actionLevel: 3,
+                emotionalIntensity: 8,
+                contentRating: "PG",
+                themes: ["family", "music", "tradition", "death"],
+                description: "A boy who dreams of being a musician travels to the Land of the Dead."
+            },
+            {
+                id: 12,
+                title: "Knives Out",
+                year: 2019,
+                genres: ["mystery", "comedy", "drama"],
+                director: "Rian Johnson",
+                actors: ["Daniel Craig", "Chris Evans", "Ana de Armas"],
+                runtime: 130,
+                rating: 7.9,
+                poster: "https://m.media-amazon.com/images/M/MV5BMGUwZjliMTAtNzAxZi00MWNiLWE2NzgtZGUxMGQxZjhhNDRiXkEyXkFqcGdeQXVyNjU1NzU3MzE@._V1_SX300.jpg",
+                mood: ["curious", "cheerful", "thoughtful"],
+                romanceLevel: 3,
+                actionLevel: 3,
+                emotionalIntensity: 5,
+                contentRating: "PG-13",
+                themes: ["mystery", "family", "deception", "justice"],
+                description: "A detective investigates the death of a patriarch of an eccentric, combative family."
+            }
+        ];
+
         // ==================== UTILITY FUNCTIONS ==================== 
         function updateProgressBar() {
             const progress = (AppState.currentStep / AppState.totalSteps) * 100;
@@ -1723,29 +3290,53 @@
 
         function validateCurrentStep() {
             switch (AppState.currentStep) {
-                case 1:
-                    if (!AppState.formData.mood) {
+                case 1: // Mood selection
+                    const selectedMood = document.querySelector('.mood-card.selected');
+                    if (!selectedMood) {
                         showError('mood-error', 'Please select your current mood to continue');
                         return false;
                     }
+                    AppState.formData.mood = selectedMood.dataset.mood;
                     break;
-                case 2:
-                    if (AppState.formData.genres.length === 0) {
+                    
+                case 2: // Genre selection
+                    const selectedGenres = document.querySelectorAll('.genre-card.selected');
+                    if (selectedGenres.length === 0) {
                         showError('genre-error', 'Please select at least one genre');
                         return false;
                     }
+                    AppState.formData.genres = Array.from(selectedGenres).map(card => card.dataset.genre);
                     break;
-                case 4:
-                    if (!AppState.formData.runtime) {
+                    
+                case 3: // Era selection (always valid)
+                    AppState.formData.era = parseInt(document.getElementById('era-slider').value);
+                    break;
+                    
+                case 4: // Runtime selection
+                    const selectedRuntime = document.querySelector('.runtime-card.selected');
+                    if (!selectedRuntime) {
                         showError('runtime-error', 'Please select your preferred runtime');
                         return false;
                     }
+                    AppState.formData.runtime = selectedRuntime.dataset.runtime;
                     break;
-                case 5:
-                    if (!AppState.formData.intensity) {
+                    
+                case 5: // Intensity selection
+                    const selectedIntensity = document.querySelector('.intensity-level.selected');
+                    if (!selectedIntensity) {
                         showError('intensity-error', 'Please select your comfort level');
                         return false;
                     }
+                    AppState.formData.intensity = parseInt(selectedIntensity.dataset.intensity);
+                    break;
+                    
+                case 6: // People selection (optional)
+                    const selectedPeople = Array.from(document.querySelectorAll('#selected-people .selected-item'))
+                        .map(item => item.textContent.replace('×', '').trim());
+                    AppState.formData.selectedPeople = selectedPeople;
+                    break;
+                    
+                case 7: // Final preferences (always valid, captured in finish button)
                     break;
             }
             return true;
@@ -1764,6 +3355,12 @@
                 return;
             }
 
+            // Track step timing
+            if (direction === 'next') {
+                const stepTime = Date.now() - (AppState.stepStartTime || Date.now());
+                Analytics.trackStepCompletion(AppState.currentStep, stepTime);
+            }
+
             // Animation classes based on direction
             const outClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
             const inClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
@@ -1780,9 +3377,17 @@
                 nextCard.classList.add(inClass);
                 
                 AppState.currentStep = newStep;
+                AppState.stepStartTime = Date.now(); // Track when new step starts
+                
                 updateProgressBar();
                 updateProgressDots();
                 updateNavigationButtons();
+                
+                Analytics.trackEvent('step_transition', { 
+                    from: AppState.currentStep === newStep ? newStep - (direction === 'next' ? 1 : -1) : AppState.currentStep,
+                    to: newStep,
+                    direction 
+                });
                 
                 setTimeout(() => {
                     nextCard.classList.remove(inClass);
@@ -1820,6 +3425,8 @@
                     card.classList.add('selected');
                     AppState.formData.mood = card.dataset.mood;
                     
+                    Analytics.trackEvent('mood_selected', { mood: card.dataset.mood });
+                    
                     // Auto-advance after selection
                     setTimeout(() => {
                         if (validateCurrentStep()) {
@@ -1839,20 +3446,32 @@
                         // Deselect
                         card.classList.remove('selected');
                         AppState.formData.genres = AppState.formData.genres.filter(g => g !== genre);
+                        Analytics.trackEvent('genre_deselected', { genre });
                     } else {
                         // Select
                         card.classList.add('selected');
                         AppState.formData.genres.push(genre);
+                        Analytics.trackEvent('genre_selected', { genre });
                     }
+                    
+                    Analytics.trackEvent('genres_updated', { 
+                        selectedGenres: AppState.formData.genres,
+                        count: AppState.formData.genres.length 
+                    });
                 });
             });
         }
 
         function initializeEraSlider() {
+            const debouncedEraUpdate = debounce((value) => {
+                Analytics.trackEvent('era_changed', { era: value });
+            }, 500);
+
             function updateEraDisplay(value) {
                 const decade = Math.floor(value / 10) * 10;
                 elements.eraDisplay.textContent = `${decade}s`;
                 AppState.formData.era = parseInt(value);
+                debouncedEraUpdate(value);
             }
 
             elements.eraSlider.addEventListener('input', (e) => {
@@ -1873,6 +3492,8 @@
                     card.classList.add('selected');
                     AppState.formData.runtime = card.dataset.runtime;
                     
+                    Analytics.trackEvent('runtime_selected', { runtime: card.dataset.runtime });
+                    
                     // Auto-advance after selection
                     setTimeout(() => {
                         if (validateCurrentStep()) {
@@ -1892,6 +3513,8 @@
                     // Add selection to clicked level
                     level.classList.add('selected');
                     AppState.formData.intensity = parseInt(level.dataset.intensity);
+                    
+                    Analytics.trackEvent('intensity_selected', { intensity: level.dataset.intensity });
                     
                     // Auto-advance after selection
                     setTimeout(() => {
@@ -1962,6 +3585,7 @@
         // ==================== NAVIGATION HANDLERS ==================== 
         function initializeNavigation() {
             elements.startBtn.addEventListener('click', () => {
+                Analytics.trackEvent('journey_started');
                 elements.welcomeSection.style.display = 'none';
                 elements.questionnaireSection.style.display = 'block';
                 elements.restartBtn.style.display = 'inline-flex';
@@ -1970,95 +3594,694 @@
             });
 
             elements.restartBtn.addEventListener('click', () => {
-                // Reset application state
-                AppState.currentStep = 1;
-                AppState.formData = {
-                    mood: null,
-                    genres: [],
-                    era: 2010,
-                    runtime: null,
-                    intensity: null,
-                    favoritePeople: [],
-                    romance: 5,
-                    action: 5,
-                    emotion: 5
-                };
-
-                // Reset UI
-                elements.questionnaireSection.style.display = 'none';
-                elements.loadingSection.style.display = 'none';
-                elements.resultsSection.style.display = 'none';
-                elements.welcomeSection.style.display = 'block';
-                elements.restartBtn.style.display = 'none';
-
-                // Reset form selections
-                document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
-                elements.selectedPeople.innerHTML = '';
-                elements.eraSlider.value = 2010;
-                elements.romanceSlider.value = 5;
-                elements.actionSlider.value = 5;
-                elements.emotionSlider.value = 5;
-
-                // Reset question visibility
-                elements.questionCards.forEach((card, index) => {
-                    card.style.display = index === 0 ? 'block' : 'none';
-                });
-
-                updateProgressBar();
-                updateProgressDots();
+                Analytics.trackEvent('journey_restarted', Analytics.getSessionSummary());
+                resetApplication();
             });
 
             elements.prevBtn.addEventListener('click', () => {
                 if (AppState.currentStep > 1) {
+                    Analytics.trackEvent('step_back', { from: AppState.currentStep });
                     transitionToStep(AppState.currentStep - 1, 'prev');
                 }
             });
 
             elements.nextBtn.addEventListener('click', () => {
+                const stepStartTime = Date.now();
                 if (validateCurrentStep() && AppState.currentStep < AppState.totalSteps) {
+                    const timeSpent = stepStartTime - (AppState.stepStartTime || stepStartTime);
+                    Analytics.trackStepCompletion(AppState.currentStep, timeSpent);
                     transitionToStep(AppState.currentStep + 1, 'next');
                 }
             });
 
             elements.finishBtn.addEventListener('click', () => {
-                console.log('Form Data:', AppState.formData);
+                if (!validateCurrentStep()) return;
+                
+                // Capture final form data
+                AppState.formData.romance = parseInt(document.getElementById('romance-slider').value);
+                AppState.formData.action = parseInt(document.getElementById('action-slider').value);
+                AppState.formData.emotion = parseInt(document.getElementById('emotion-slider').value);
+                
+                Analytics.trackEvent('questionnaire_completed', AppState.formData);
                 
                 // Show loading screen
                 elements.questionnaireSection.style.display = 'none';
                 elements.loadingSection.style.display = 'block';
                 
-                // Simulate loading process
-                simulateLoading();
+                // Start enhanced loading with AI
+                LoadingManager.start();
+            });
+
+            // Initialize result action buttons
+            initializeResultActions();
+        }
+
+        function initializeResultActions() {
+            // New Recommendations button
+            document.getElementById('new-recommendations-btn').addEventListener('click', () => {
+                Analytics.trackEvent('new_recommendations_requested');
+                
+                try {
+                    // Add some randomness to get different results
+                    const modifiedFormData = { ...AppState.formData };
+                    modifiedFormData.randomSeed = Math.random();
+                    
+                    const newRecommendations = RecommendationEngines[AppState.currentEngine + 'Engine'](modifiedFormData);
+                    AppState.currentRecommendations = injectDiversity(newRecommendations);
+                    
+                    displayRecommendations(AppState.currentRecommendations);
+                    LoadingManager.updateAnalyticsDisplay();
+                    
+                    SocialSharing.showToast('New recommendations generated!', 'success');
+                    Analytics.trackEvent('new_recommendations_generated', { count: newRecommendations.length });
+                } catch (error) {
+                    Analytics.trackError(error, 'new_recommendations');
+                    SocialSharing.showToast('Failed to generate new recommendations', 'error');
+                }
+            });
+
+            // Surprise Me button - Random quality recommendation
+            document.getElementById('surprise-me-btn').addEventListener('click', () => {
+                Analytics.trackEvent('surprise_me_clicked');
+                
+                try {
+                    const surpriseRecommendation = PremiumFeatures.generateSurpriseRecommendation();
+                    AppState.currentRecommendations = [surpriseRecommendation];
+                    
+                    displayRecommendations(AppState.currentRecommendations);
+                    SocialSharing.showToast('Surprise! Here\'s a quality pick for you!', 'success');
+                    
+                    // Update analytics display for single recommendation
+                    document.getElementById('match-percentage').textContent = `${Math.round(surpriseRecommendation.score * 100)}%`;
+                    document.getElementById('analytics-text').textContent = 'Surprise recommendation • Quality pick selected';
+                    
+                    Analytics.trackEvent('surprise_recommendation_generated', { 
+                        movieId: surpriseRecommendation.movie.id,
+                        title: surpriseRecommendation.movie.title 
+                    });
+                } catch (error) {
+                    Analytics.trackError(error, 'surprise_recommendation');
+                    SocialSharing.showToast('Failed to generate surprise recommendation', 'error');
+                }
+            });
+
+            // Mood Quick Pick button
+            document.getElementById('mood-quick-btn').addEventListener('click', () => {
+                Analytics.trackEvent('mood_quick_pick_clicked');
+                
+                try {
+                    const quickRecommendations = PremiumFeatures.generateMoodQuickPicks(AppState.formData.mood);
+                    AppState.currentRecommendations = quickRecommendations;
+                    
+                    displayRecommendations(AppState.currentRecommendations);
+                    LoadingManager.updateAnalyticsDisplay();
+                    
+                    SocialSharing.showToast(`Quick ${AppState.formData.mood} mood picks!`, 'success');
+                    Analytics.trackEvent('mood_quick_picks_generated', { 
+                        mood: AppState.formData.mood,
+                        count: quickRecommendations.length 
+                    });
+                } catch (error) {
+                    Analytics.trackError(error, 'mood_quick_picks');
+                    SocialSharing.showToast('Failed to generate mood picks', 'error');
+                }
+            });
+
+            // Share Results button
+            document.getElementById('share-results-btn').addEventListener('click', () => {
+                Analytics.trackEvent('share_modal_opened');
+                openModal('share-modal');
+            });
+
+            // Watchlist button
+            document.getElementById('view-watchlist-btn').addEventListener('click', () => {
+                Analytics.trackEvent('watchlist_modal_opened');
+                PremiumFeatures.openWatchlistModal();
+            });
+
+            // Error handling buttons
+            document.getElementById('retry-recommendations-btn').addEventListener('click', () => {
+                Analytics.trackEvent('retry_recommendations');
+                elements.questionnaireSection.style.display = 'none';
+                elements.loadingSection.style.display = 'block';
+                LoadingManager.start();
+            });
+
+            document.getElementById('fallback-recommendations-btn').addEventListener('click', () => {
+                Analytics.trackEvent('fallback_recommendations_requested');
+                AppState.currentRecommendations = getFallbackRecommendations();
+                displayRecommendations(AppState.currentRecommendations);
+                document.getElementById('recommendations-error').style.display = 'none';
+                document.querySelector('.perfect-matches').style.display = 'block';
+            });
+
+            // Modal handlers
+            initializeModals();
+        }
+
+        function initializeModals() {
+            // Share modal
+            document.getElementById('share-modal-close').addEventListener('click', () => closeModal('share-modal'));
+            document.getElementById('share-modal-overlay').addEventListener('click', () => closeModal('share-modal'));
+            
+            // Movie detail modal
+            document.getElementById('movie-modal-close').addEventListener('click', () => closeModal('movie-modal'));
+            document.getElementById('movie-modal-overlay').addEventListener('click', () => closeModal('movie-modal'));
+
+            // Share buttons
+            document.querySelectorAll('.share-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const platform = btn.dataset.platform;
+                    SocialSharing.shareOnPlatform(platform);
+                    closeModal('share-modal');
+                });
             });
         }
 
-        // ==================== LOADING SIMULATION ==================== 
-        function simulateLoading() {
-            const steps = document.querySelectorAll('.loading-steps li');
-            let currentLoadingStep = 0;
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
 
-            const loadingInterval = setInterval(() => {
-                if (currentLoadingStep > 0) {
-                    steps[currentLoadingStep - 1].classList.remove('active');
-                }
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function resetApplication() {
+            // Reset application state
+            AppState.currentStep = 1;
+            AppState.formData = {
+                mood: null,
+                genres: [],
+                era: 2010,
+                runtime: null,
+                intensity: null,
+                selectedPeople: [],
+                romance: 5,
+                action: 5,
+                emotion: 5
+            };
+
+            // Reset UI
+            elements.questionnaireSection.style.display = 'none';
+            elements.loadingSection.style.display = 'none';
+            elements.resultsSection.style.display = 'none';
+            elements.welcomeSection.style.display = 'block';
+            elements.restartBtn.style.display = 'none';
+
+            // Reset form selections
+            document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+            elements.selectedPeople.innerHTML = '';
+            elements.eraSlider.value = 2010;
+            elements.romanceSlider.value = 5;
+            elements.actionSlider.value = 5;
+            elements.emotionSlider.value = 5;
+
+            // Reset question visibility
+            elements.questionCards.forEach((card, index) => {
+                card.style.display = index === 0 ? 'block' : 'none';
+            });
+
+            updateProgressBar();
+            updateProgressDots();
+        }
+
+        function saveToWatchlist() {
+            try {
+                const watchlist = {
+                    timestamp: Date.now(),
+                    recommendations: AppState.currentRecommendations.map(rec => ({
+                        title: rec.movie.title,
+                        year: rec.movie.year,
+                        score: rec.score,
+                        explanation: rec.explanation
+                    })),
+                    preferences: AppState.formData
+                };
+
+                // Save to localStorage (in a real app, this would go to a backend)
+                const existingWatchlists = JSON.parse(localStorage.getItem('popChoiceWatchlists') || '[]');
+                existingWatchlists.push(watchlist);
+                localStorage.setItem('popChoiceWatchlists', JSON.stringify(existingWatchlists));
+
+                SocialSharing.showToast('Watchlist saved successfully!', 'success');
+                Analytics.trackEvent('watchlist_saved', { movieCount: watchlist.recommendations.length });
+            } catch (error) {
+                Analytics.trackError(error, 'watchlist_save');
+                SocialSharing.showToast('Failed to save watchlist', 'error');
+            }
+        }
+
+        // ==================== ENHANCED RECOMMENDATION DISPLAY ==================== 
+        function displayRecommendations(recommendations) {
+            const movieGrid = document.querySelector('.movie-grid');
+            if (!movieGrid) return;
+
+            movieGrid.innerHTML = '';
+
+            recommendations.forEach((rec, index) => {
+                const { movie, score, confidence, explanation } = rec;
+                const matchPercentage = Math.round(score * 100);
                 
-                if (currentLoadingStep < steps.length) {
-                    steps[currentLoadingStep].classList.add('active');
-                    currentLoadingStep++;
+                const card = document.createElement('div');
+                card.className = 'movie-card glass glass-hover fade-in';
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.onclick = () => showMovieDetails(movie, rec);
+                
+                card.innerHTML = `
+                    <div class="movie-poster">
+                        <div class="match-score">${matchPercentage}%</div>
+                        <div class="movie-actions">
+                            <button class="movie-action-btn" onclick="event.stopPropagation(); addToWatchlist('${movie.id}')" title="Add to Watchlist">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
+                            <button class="movie-action-btn" onclick="event.stopPropagation(); shareMovie('${movie.id}')" title="Share Movie">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                        ${movie.poster ? 
+                            `<img src="${movie.poster}" alt="${movie.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                             <div style="background: linear-gradient(45deg, var(--accent-purple), var(--accent-blue)); height: 100%; display: none; align-items: center; justify-content: center;">
+                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3; color: white;"></i>
+                             </div>` :
+                            `<div style="background: linear-gradient(45deg, var(--accent-purple), var(--accent-blue)); height: 100%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3; color: white;"></i>
+                             </div>`
+                        }
+                        <div class="movie-overlay">
+                            <div class="movie-title">${movie.title}</div>
+                            <div class="movie-info">
+                                <span>${movie.year}</span>
+                                <div class="movie-rating">
+                                    <i class="fas fa-star" style="color: var(--accent-gold);"></i>
+                                    <span>${movie.rating}</span>
+                                </div>
+                            </div>
+                            <div style="margin-top: var(--spacing-xs); font-size: 0.8rem; color: var(--text-secondary);">
+                                ${explanation}
+                            </div>
+                            <div style="margin-top: var(--spacing-xs); font-size: 0.7rem; color: var(--accent-gold);">
+                                Confidence: ${confidence}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                movieGrid.appendChild(card);
+            });
+            
+            Analytics.trackEvent('recommendations_displayed', { count: recommendations.length });
+        }
+
+        function showMovieDetails(movie, recommendation) {
+            Analytics.trackEvent('movie_details_opened', { movieId: movie.id, title: movie.title });
+            
+            const modal = document.getElementById('movie-modal');
+            const modalTitle = document.getElementById('movie-modal-title');
+            const modalBody = document.getElementById('movie-modal-body');
+            
+            modalTitle.textContent = movie.title;
+            
+            modalBody.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
+                    <div>
+                        ${movie.poster ? 
+                            `<img src="${movie.poster}" alt="${movie.title}" style="width: 100%; border-radius: var(--radius-md);">` :
+                            `<div style="aspect-ratio: 2/3; background: linear-gradient(45deg, var(--accent-purple), var(--accent-blue)); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3; color: white;"></i>
+                             </div>`
+                        }
+                    </div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                            <div style="font-size: 1.2rem; font-weight: 600;">${Math.round(recommendation.score * 100)}% Match</div>
+                            <div style="padding: var(--spacing-xs) var(--spacing-sm); background: var(--accent-purple); border-radius: var(--radius-sm); font-size: 0.8rem;">
+                                ${recommendation.confidence} Confidence
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: var(--spacing-md);">
+                            <strong>Year:</strong> ${movie.year}<br>
+                            <strong>Director:</strong> ${movie.director}<br>
+                            <strong>Rating:</strong> ${movie.rating}/10<br>
+                            <strong>Runtime:</strong> ${movie.runtime} minutes<br>
+                            <strong>Content Rating:</strong> ${movie.contentRating}
+                        </div>
+                        
+                        <div style="margin-bottom: var(--spacing-md);">
+                            <strong>Genres:</strong><br>
+                            <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-xs); margin-top: var(--spacing-xs);">
+                                ${movie.genres.map(genre => `<span style="padding: var(--spacing-xs) var(--spacing-sm); background: var(--bg-glass); border-radius: var(--radius-sm); font-size: 0.8rem;">${genre}</span>`).join('')}
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: var(--spacing-md);">
+                            <strong>Cast:</strong><br>
+                            <div style="color: var(--text-secondary); margin-top: var(--spacing-xs);">
+                                ${movie.actors.join(', ')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: var(--spacing-lg);">
+                    <strong>Why this matches you:</strong><br>
+                    <div style="color: var(--text-secondary); margin-top: var(--spacing-xs);">
+                        ${recommendation.explanation}
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: var(--spacing-lg);">
+                    <strong>Description:</strong><br>
+                    <div style="color: var(--text-secondary); margin-top: var(--spacing-xs);">
+                        ${movie.description}
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="addToWatchlist('${movie.id}')">
+                        <i class="fas fa-bookmark"></i>
+                        Add to Watchlist
+                    </button>
+                    <button class="btn btn-secondary" onclick="shareMovie('${movie.id}')">
+                        <i class="fas fa-share-alt"></i>
+                        Share Movie
+                    </button>
+                    <button class="btn btn-secondary" onclick="findSimilar('${movie.id}')">
+                        <i class="fas fa-search"></i>
+                        Find Similar
+                    </button>
+                </div>
+            `;
+            
+            openModal('movie-modal');
+        }
+
+        // ==================== MOVIE ACTIONS ==================== 
+        function addToWatchlist(movieId) {
+            const movie = MOVIE_DATABASE.find(m => m.id == movieId);
+            if (!movie) return;
+            
+            try {
+                const watchlistItem = {
+                    movieId: movieId,
+                    title: movie.title,
+                    year: movie.year,
+                    poster: movie.poster,
+                    addedAt: Date.now()
+                };
+                
+                const watchlist = JSON.parse(localStorage.getItem('popChoiceWatchlist') || '[]');
+                if (!watchlist.find(item => item.movieId == movieId)) {
+                    watchlist.push(watchlistItem);
+                    localStorage.setItem('popChoiceWatchlist', JSON.stringify(watchlist));
+                    SocialSharing.showToast(`"${movie.title}" added to watchlist!`, 'success');
+                    Analytics.trackEvent('movie_added_to_watchlist', { movieId, title: movie.title });
                 } else {
-                    clearInterval(loadingInterval);
-                    
-                    // Show results after loading
-                    setTimeout(() => {
-                        elements.loadingSection.style.display = 'none';
-                        elements.resultsSection.style.display = 'block';
-                    }, 1000);
+                    SocialSharing.showToast(`"${movie.title}" is already in your watchlist`, 'error');
                 }
-            }, 800);
+            } catch (error) {
+                Analytics.trackError(error, 'add_to_watchlist');
+                SocialSharing.showToast('Failed to add to watchlist', 'error');
+            }
+        }
+
+        function shareMovie(movieId) {
+            const movie = MOVIE_DATABASE.find(m => m.id == movieId);
+            if (!movie) return;
+            
+            const shareData = {
+                title: `Check out "${movie.title}" - recommended by PopChoice AI!`,
+                description: `I discovered this ${movie.year} ${movie.genres[0]} movie with a perfect match score. ${movie.description}`,
+                url: window.location.href
+            };
+            
+            SocialSharing.shareOnPlatform('copy');
+            Analytics.trackEvent('movie_shared', { movieId, title: movie.title });
+        }
+
+        function findSimilar(movieId) {
+            const movie = MOVIE_DATABASE.find(m => m.id == movieId);
+            if (!movie) return;
+            
+            // Find movies with similar genres and characteristics
+            const similar = MOVIE_DATABASE
+                .filter(m => m.id != movieId)
+                .map(m => {
+                    let similarity = 0;
+                    
+                    // Genre similarity
+                    const commonGenres = m.genres.filter(g => movie.genres.includes(g));
+                    similarity += commonGenres.length / Math.max(m.genres.length, movie.genres.length) * 0.4;
+                    
+                    // Director similarity
+                    if (m.director === movie.director) similarity += 0.3;
+                    
+                    // Era similarity
+                    const yearDiff = Math.abs(m.year - movie.year);
+                    similarity += Math.max(0, 1 - yearDiff / 20) * 0.2;
+                    
+                    // Rating similarity
+                    const ratingDiff = Math.abs(m.rating - movie.rating);
+                    similarity += Math.max(0, 1 - ratingDiff / 2) * 0.1;
+                    
+                    return {
+                        movie: m,
+                        score: similarity,
+                        confidence: similarity > 0.6 ? 'High' : similarity > 0.4 ? 'Medium' : 'Low',
+                        explanation: `Similar ${commonGenres.join(' & ')} ${m.director === movie.director ? 'by same director' : 'style'}`
+                    };
+                })
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 6);
+            
+            AppState.currentRecommendations = similar;
+            displayRecommendations(similar);
+            closeModal('movie-modal');
+            
+            Analytics.trackEvent('similar_movies_found', { originalMovieId: movieId, resultCount: similar.length });
+            SocialSharing.showToast(`Found ${similar.length} similar movies!`, 'success');
+        }
+
+        function getFallbackRecommendations() {
+            // Return highly-rated movies as fallback
+            const fallbacks = [
+                MOVIE_DATABASE.find(m => m.title === "Parasite"),
+                MOVIE_DATABASE.find(m => m.title === "Inception"),
+                MOVIE_DATABASE.find(m => m.title === "The Grand Budapest Hotel"),
+                MOVIE_DATABASE.find(m => m.title === "La La Land"),
+                MOVIE_DATABASE.find(m => m.title === "Mad Max: Fury Road"),
+                MOVIE_DATABASE.find(m => m.title === "Her")
+            ].filter(Boolean);
+
+            return fallbacks.map(movie => ({
+                movie,
+                score: 0.6,
+                confidence: 'Medium',
+                explanation: 'Popular highly-rated choice'
+            }));
+        }
+
+        // ==================== RECOMMENDATION ENGINE ==================== 
+        
+        function generateRecommendations(formData) {
+            // AI-powered scoring algorithm with recently watched filter
+            const scoredMovies = MOVIE_DATABASE
+                .filter(movie => !PremiumFeatures.isRecentlyWatched(movie.id))
+                .map(movie => {
+                let score = 0;
+                let reasons = [];
+
+                // Mood matching (25% weight)
+                if (formData.mood && movie.mood.includes(formData.mood)) {
+                    score += 0.25;
+                    reasons.push(`Perfect for your ${formData.mood} mood`);
+                }
+
+                // Genre matching (20% weight)
+                if (formData.genres && formData.genres.length > 0) {
+                    const genreMatches = formData.genres.filter(g => movie.genres.includes(g));
+                    if (genreMatches.length > 0) {
+                        score += 0.20 * (genreMatches.length / formData.genres.length);
+                        reasons.push(`Great ${genreMatches.join(' & ')} choice`);
+                    }
+                }
+
+                // Era preference (10% weight)
+                if (formData.era) {
+                    const eraDiff = Math.abs(movie.year - formData.era);
+                    const eraScore = Math.max(0, 1 - eraDiff / 50);
+                    score += 0.10 * eraScore;
+                }
+
+                // Runtime matching (15% weight)
+                if (formData.runtime) {
+                    let runtimeMatch = 0;
+                    if (formData.runtime === 'short' && movie.runtime < 90) runtimeMatch = 1;
+                    else if (formData.runtime === 'medium' && movie.runtime >= 90 && movie.runtime < 150) runtimeMatch = 1;
+                    else if (formData.runtime === 'long' && movie.runtime >= 150) runtimeMatch = 1;
+                    else runtimeMatch = 0.5;
+                    
+                    score += 0.15 * runtimeMatch;
+                }
+
+                // Content intensity (10% weight)
+                if (formData.intensity) {
+                    const ratingValues = { 'G': 1, 'PG': 3, 'PG-13': 6, 'R': 9, 'NC-17': 10 };
+                    const movieIntensity = ratingValues[movie.contentRating] || 5;
+                    const intensityDiff = Math.abs(formData.intensity - movieIntensity);
+                    const intensityScore = Math.max(0, 1 - intensityDiff / 10);
+                    score += 0.10 * intensityScore;
+                }
+
+                // Romance level (8% weight)
+                if (formData.romance) {
+                    const romanceDiff = Math.abs(formData.romance - movie.romanceLevel);
+                    const romanceScore = Math.max(0, 1 - romanceDiff / 10);
+                    score += 0.08 * romanceScore;
+                }
+
+                // Action level (7% weight)
+                if (formData.action) {
+                    const actionDiff = Math.abs(formData.action - movie.actionLevel);
+                    const actionScore = Math.max(0, 1 - actionDiff / 10);
+                    score += 0.07 * actionScore;
+                }
+
+                // Emotional intensity (5% weight)
+                if (formData.emotion) {
+                    const emotionDiff = Math.abs(formData.emotion - movie.emotionalIntensity);
+                    const emotionScore = Math.max(0, 1 - emotionDiff / 10);
+                    score += 0.05 * emotionScore;
+                }
+
+                // People preference bonus (15% bonus)
+                if (formData.selectedPeople && formData.selectedPeople.length > 0) {
+                    const moviePeople = [movie.director, ...movie.actors];
+                    const peopleMatches = formData.selectedPeople.filter(person => 
+                        moviePeople.some(p => p.toLowerCase().includes(person.toLowerCase()))
+                    );
+                    if (peopleMatches.length > 0) {
+                        score += 0.15;
+                        reasons.push(`Features ${peopleMatches[0]}`);
+                    }
+                }
+
+                // High rating bonus
+                if (movie.rating >= 8.0) {
+                    reasons.push(`Highly rated (${movie.rating}/10)`);
+                }
+
+                // Calculate confidence level
+                let confidence = 'Low';
+                if (score >= 0.8) confidence = 'Very High';
+                else if (score >= 0.6) confidence = 'High';
+                else if (score >= 0.4) confidence = 'Medium';
+
+                return {
+                    movie,
+                    score,
+                    confidence,
+                    explanation: reasons.length > 0 ? reasons.slice(0, 3).join(' • ') : 'Matches your preferences'
+                };
+            });
+
+            // Sort by score and inject diversity
+            const sorted = scoredMovies.sort((a, b) => b.score - a.score);
+            return injectDiversity(sorted).slice(0, 6);
+        }
+
+        function injectDiversity(scoredMovies) {
+            const diverse = [];
+            const usedGenres = new Set();
+            const usedDirectors = new Set();
+
+            // First pass: get diverse high-scoring movies
+            for (const item of scoredMovies) {
+                if (diverse.length >= 6) break;
+                
+                const hasNewGenre = item.movie.genres.some(g => !usedGenres.has(g));
+                const hasNewDirector = !usedDirectors.has(item.movie.director);
+                
+                if (hasNewGenre || hasNewDirector || diverse.length < 3) {
+                    diverse.push(item);
+                    item.movie.genres.forEach(g => usedGenres.add(g));
+                    usedDirectors.add(item.movie.director);
+                }
+            }
+
+            // Fill remaining slots with highest scores
+            for (const item of scoredMovies) {
+                if (diverse.length >= 6) break;
+                if (!diverse.includes(item)) {
+                    diverse.push(item);
+                }
+            }
+
+            return diverse;
+        }
+
+        function displayRecommendations(recommendations) {
+            const movieGrid = document.querySelector('.movie-grid');
+            if (!movieGrid) return;
+
+            movieGrid.innerHTML = '';
+
+            recommendations.forEach((rec, index) => {
+                const { movie, score, confidence, explanation } = rec;
+                const matchPercentage = Math.round(score * 100);
+                
+                const card = document.createElement('div');
+                card.className = 'movie-card glass glass-hover fade-in';
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                card.innerHTML = `
+                    <div class="movie-poster">
+                        <div class="match-score">${matchPercentage}%</div>
+                        ${movie.poster ? 
+                            `<img src="${movie.poster}" alt="${movie.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                             <div style="background: linear-gradient(45deg, var(--accent-purple), var(--accent-blue)); height: 100%; display: none; align-items: center; justify-content: center;">
+                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3; color: white;"></i>
+                             </div>` :
+                            `<div style="background: linear-gradient(45deg, var(--accent-purple), var(--accent-blue)); height: 100%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3; color: white;"></i>
+                             </div>`
+                        }
+                        <div class="movie-overlay">
+                            <div class="movie-title">${movie.title}</div>
+                            <div class="movie-info">
+                                <span>${movie.year}</span>
+                                <div class="movie-rating">
+                                    <i class="fas fa-star" style="color: var(--accent-gold);"></i>
+                                    <span>${movie.rating}</span>
+                                </div>
+                            </div>
+                            <div style="margin-top: var(--spacing-xs); font-size: 0.8rem; color: var(--text-secondary);">
+                                ${explanation}
+                            </div>
+                            <div style="margin-top: var(--spacing-xs); font-size: 0.7rem; color: var(--accent-gold);">
+                                Confidence: ${confidence}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                movieGrid.appendChild(card);
+            });
         }
 
         // ==================== INITIALIZATION ==================== 
         function initializeApp() {
+            Analytics.trackEvent('app_initialized');
+            
+            // Initialize core functionality
             initializeNavigation();
             initializeMoodSelection();
             initializeGenreSelection();
@@ -2068,17 +4291,192 @@
             initializePeopleSearch();
             initializeSliders();
             
-            // Make removeSelectedPerson globally available
+            // Initialize premium features
+            PremiumFeatures.updateWatchlistCounter();
+            
+            // Initialize accessibility
+            AccessibilityEnhancer.init();
+            
+            // Initialize performance monitoring
+            PerformanceMonitor.init();
+            
+            // Initialize error handling
+            ErrorHandler.init();
+            
+            // Make functions globally available
             window.removeSelectedPerson = removeSelectedPerson;
+            window.addToWatchlist = addToWatchlist;
+            window.shareMovie = shareMovie;
+            window.findSimilar = findSimilar;
+            window.showMovieDetails = showMovieDetails;
+            window.openModal = openModal;
+            window.closeModal = closeModal;
+            window.PremiumFeatures = PremiumFeatures;
             
             // Initialize progress
             updateProgressBar();
             updateProgressDots();
             updateNavigationButtons();
+            
+            // Performance monitoring
+            window.addEventListener('beforeunload', () => {
+                Analytics.trackEvent('session_ended', Analytics.getSessionSummary());
+            });
+            
+            // Global error handling
+            window.addEventListener('error', (event) => {
+                Analytics.trackError(event.error, 'global_error');
+            });
+            
+            // Accessibility improvements
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const openModals = document.querySelectorAll('.modal[style*="flex"]');
+                    if (openModals.length > 0) {
+                        closeModal(openModals[openModals.length - 1].id);
+                    }
+                }
+            });
+            
+            // Performance optimization for mobile
+            if (window.innerWidth <= 768) {
+                document.documentElement.style.setProperty('--transition-medium', '0.2s ease-out');
+                document.documentElement.style.setProperty('--transition-slow', '0.3s ease-out');
+            }
+            
+            // Setup accessibility preferences
+            if (AppState.accessibility.reducedMotion) {
+                document.documentElement.classList.add('reduced-motion');
+            }
+            if (AppState.accessibility.highContrast) {
+                document.documentElement.classList.add('high-contrast');
+            }
+            
+            // Add screen reader live region
+            const liveRegion = document.createElement('div');
+            liveRegion.id = 'sr-live-region';
+            liveRegion.setAttribute('aria-live', 'polite');
+            liveRegion.style.cssText = 'position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden;';
+            document.body.appendChild(liveRegion);
+            
+            console.log('🎬 PopChoice AI Movie Recommendations - Premium Edition Loaded!');
         }
+
+        // ==================== UTILITY MODULES ==================== 
+        
+        // Simple accessibility enhancer
+        const AccessibilityEnhancer = {
+            init() {
+                // Setup keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        const openModals = document.querySelectorAll('.modal[style*="flex"]');
+                        if (openModals.length > 0) {
+                            closeModal(openModals[openModals.length - 1].id);
+                        }
+                    }
+                });
+                
+                // Add high contrast support
+                if (AppState.accessibility.highContrast) {
+                    document.documentElement.classList.add('high-contrast');
+                }
+                
+                console.log('✅ Accessibility features initialized');
+            }
+        };
+        
+        // Simple performance monitor
+        const PerformanceMonitor = {
+            init() {
+                // Monitor FPS
+                let lastTime = performance.now();
+                let frameCount = 0;
+                
+                const measureFPS = (currentTime) => {
+                    frameCount++;
+                    if (currentTime >= lastTime + 1000) {
+                        AppState.performance.fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+                        frameCount = 0;
+                        lastTime = currentTime;
+                    }
+                    requestAnimationFrame(measureFPS);
+                };
+                requestAnimationFrame(measureFPS);
+                
+                // Memory optimization
+                setInterval(() => {
+                    if (AppState.analytics.interactions.length > 100) {
+                        AppState.analytics.interactions = AppState.analytics.interactions.slice(-50);
+                    }
+                }, 60000);
+                
+                console.log('✅ Performance monitoring initialized');
+            }
+        };
+        
+        // Simple error handler
+        const ErrorHandler = {
+            init() {
+                window.addEventListener('error', (event) => {
+                    Analytics.trackError(event.error, 'global_error');
+                    console.error('PopChoice Error:', event.error);
+                });
+                
+                window.addEventListener('unhandledrejection', (event) => {
+                    Analytics.trackError(event.reason, 'unhandled_promise_rejection');
+                    event.preventDefault();
+                });
+                
+                console.log('✅ Error handling initialized');
+            }
+        };
+
+        // ==================== PERFORMANCE OPTIMIZATIONS ==================== 
+        
+        // Debounce function for performance
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Lazy loading for heavy operations
+        function lazyLoad(callback) {
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(callback);
+            } else {
+                setTimeout(callback, 1);
+            }
+        }
+
+        // Memory management
+        function cleanupOldData() {
+            // Clean up old analytics data to prevent memory leaks
+            if (AppState.analytics.interactions.length > 1000) {
+                AppState.analytics.interactions = AppState.analytics.interactions.slice(-500);
+            }
+        }
+
+        // Auto cleanup every 5 minutes
+        setInterval(cleanupOldData, 300000);
 
         // Start the application when DOM is loaded
         document.addEventListener('DOMContentLoaded', initializeApp);
+
+        // Add service worker for offline functionality (if available)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // In a real app, register service worker here
+                console.log('Service Worker support detected');
+            });
+        }
     </script>
 </body>
 </html>
