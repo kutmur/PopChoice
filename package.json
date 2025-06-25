@@ -1,0 +1,24 @@
+{
+  "name": "popchoice",
+  "version": "1.0.0",
+  "description": "AI-powered movie recommendation app. Instantly get personalized movie suggestions based on your tastes—just answer a few questions and let AI do the magic.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kutmur/PopChoice.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kutmur/PopChoice/issues"
+  },
+  "homepage": "https://github.com/kutmur/PopChoice#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  }
+}
