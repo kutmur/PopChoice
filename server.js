@@ -379,7 +379,7 @@ function generateFallbackRecommendations(candidateMovies, userSelections) {
         return templates[index % templates.length];
     };
         
-    return candidateMovies
+    return [...candidateMovies]
         .sort((a, b) => b.vote_average - a.vote_average)
         .slice(0, RECOMMENDATION_COUNT)
         .map((movie, index) => ({
