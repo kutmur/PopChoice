@@ -230,7 +230,6 @@ async function getOpenAIRecommendations(candidateMovies, userSelections) {
         }));
         
         // Create the enhanced OpenAI prompt for unique, specific reasoning
-        const userContext = `The user is planning a '${userSelections.context}' and wants to feel '${userSelections.mood}'. They enjoy movies with themes of '${userSelections.themes && userSelections.themes.length > 0 ? userSelections.themes.join(', ') : 'various themes'}'.`;
 
         const prompt = `You are a brilliant and highly specific movie analyst. Your mission is to provide five completely unique and tailored recommendations for a user.
 
