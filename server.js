@@ -54,7 +54,7 @@ const GENRE_MAPPING = {
  */
 app.post('/api/recommendations', async (req, res) => {
     try {
-        console.log('Received recommendation request:', req.body);
+        console.log('🎬 Received recommendation request:', JSON.stringify(req.body, null, 2));
         
         const userSelections = req.body;
         
@@ -62,13 +62,17 @@ app.post('/api/recommendations', async (req, res) => {
         const candidateMovies = await getCandidateMoviesFromTMDB(userSelections);
         
         if (candidateMovies.length === 0) {
+            console.log('⚠️ No candidate movies found from TMDB');
             return res.json([]);
         }
+        
+        console.log(`✅ Found ${candidateMovies.length} candidate movies from TMDB`);
         
         // Step 2: Use OpenAI to intelligently filter and rank movies
         const recommendations = await getOpenAIRecommendations(candidateMovies, userSelections);
         
-        console.log(`Returning ${recommendations.length} recommendations`);
+        console.log(`🎯 Returning ${recommendations.length} recommendations`);
+        console.log('Sample reasoning:', recommendations[0]?.reasoning);
         res.json(recommendations);
         
     } catch (error) {
@@ -183,107 +187,186 @@ async function getCandidateMoviesFromTMDB(userSelections) {
  * Use OpenAI to intelligently filter and rank movies based on mood and context
  */
 async function getOpenAIRecommendations(candidateMovies, userSelections) {
-    try {
-        // Create a concise movie list for OpenAI
-        const movieList = candidateMovies.map((movie, index) => 
-            `${index + 1}. "${movie.title}" (${movie.release_year}) - ${movie.overview}`
-        ).join('\n\n');
-        
-        // Build context description from user selections
-        const contextParts = [];
-        if (userSelections.mood) contextParts.push(`mood: ${userSelections.mood}`);
-        if (userSelections.context) contextParts.push(`watching context: ${userSelections.context}`);
-        if (userSelections.themes && userSelections.themes.length > 0) {
-            contextParts.push(`preferred themes: ${userSelections.themes.join(', ')}`);
-        }
-        
-        const userContext = contextParts.join(', ');
-        
-        // Create the OpenAI prompt
-        const prompt = `You are a movie recommendation expert. I have a list of ${candidateMovies.length} movies that match the user's basic criteria (genre, era, rating). Now I need you to select the TOP 5 movies that best match their specific preferences: ${userContext}.
-
-Here are the candidate movies:
-
-${movieList}
-
-Please select exactly 5 movies that best match the user's ${userContext}. For each selected movie, provide:
-1. The movie number from the list
-2. A brief reason (1-2 sentences) why this movie fits their preferences
-
-Format your response as JSON:
-{
-  "recommendations": [
-    {
-      "movieNumber": 1,
-      "reasoning": "Brief explanation of why this movie matches their preferences"
+    // Build enhanced user context description (outside try block for scope)
+    const contextParts = [];
+    if (userSelections.context) contextParts.push(`viewing context: '${userSelections.context}'`);
+    if (userSelections.mood) contextParts.push(`desired mood: '${userSelections.mood}'`);
+    if (userSelections.era) contextParts.push(`preferred era: '${userSelections.era}'`);
+    if (userSelections.themes && userSelections.themes.length > 0) {
+        contextParts.push(`themes they enjoy: ${userSelections.themes.join(', ')}`);
     }
-  ]
-}`;
+    
+    const userContext = contextParts.join(', ');
+    
+    try {
+        // Create movie candidates in JSON format for OpenAI
+        const movieCandidates = candidateMovies.map(movie => ({
+            id: movie.id,
+            title: movie.title,
+            year: movie.release_year,
+            overview: movie.overview || 'No description available',
+            rating: movie.vote_average
+        }));
+        
+        // Create the enhanced OpenAI prompt for unique, specific reasoning
+        const userContext = `The user is planning a '${userSelections.context}' and wants to feel '${userSelections.mood}'. They enjoy movies with themes of '${userSelections.themes && userSelections.themes.length > 0 ? userSelections.themes.join(', ') : 'various themes'}'.`;
 
-        console.log('Sending prompt to OpenAI...');
+        const prompt = `You are a brilliant and highly specific movie analyst. Your mission is to provide five completely unique and tailored recommendations for a user.
+
+**User's Request:** ${userContext}
+
+**Movie Candidates (JSON):**
+${JSON.stringify(movieCandidates.map(m => ({ id: m.id, title: m.title, overview: m.overview })), null, 2)}
+
+**YOUR TASK - A 3-STEP PROCESS:**
+
+**Step 1: ANALYSIS (For EACH movie individually)**
+For every single movie in the candidate list, you must perform a separate analysis. Ask yourself: "How does THIS SPECIFIC movie's plot, main characters, or unique tone connect to the user's desire for a '${userSelections.mood}' mood during their '${userSelections.context}'?"
+
+**Step 2: SELECTION & REASONING (For EACH of the top 5)**
+From your individual analyses, select the top 5 movies. Then, for EACH of the 5 selected movies, you MUST write a completely distinct and specific one-sentence reasoning. This reasoning must be unique to that movie and reference its specific elements.
+
+**Step 3: FINAL OUTPUT (Strict JSON format)**
+Combine your 5 unique reasonings into a single JSON array.
+
+**CRITICAL RULES TO PREVENT REPETITION:**
+• **NEVER** use the same reasoning sentence, or even a very similar sentence structure, for more than one movie.
+• **Each reasoning MUST mention a specific detail from that movie's plot or character.** For example, instead of "its engaging storyline," say "the dynamic between the two rival magicians."
+• **DO NOT** simply list the user's criteria. You must interpret and explain.
+
+**You MUST respond with ONLY a valid JSON array of objects. No other text.**
+
+**Example of the DIVERSE and SPECIFIC output I expect:**
+[
+  {
+    "id": 787699,
+    "reasoning": "The breathtaking race sequences and Sonic's unshakeable optimism deliver the high-energy 'fun' you're looking for, making it an exhilarating watch."
+  },
+  {
+    "id": 940551,
+    "reasoning": "This film's story of an unlikely friendship between a girl and her quirky alien 'dog' provides a heartwarming and humorous experience, perfect for a light-hearted evening."
+  },
+  {
+    "id": 1011985,
+    "reasoning": "The clever blend of monster-hunting action with the vibrant world of K-pop creates a uniquely fun and visually spectacular adventure."
+  }
+]`;
+
+        console.log('Sending enhanced prompt to OpenAI...');
         
         const completion = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [
                 {
                     role: "system",
-                    content: "You are a movie recommendation expert. Always respond with valid JSON in the exact format requested."
+                    content: "You are a brilliant movie analyst specializing in unique, specific recommendations. Each movie you analyze must receive a completely different reasoning that mentions specific plot elements, characters, or unique aspects of that particular film. NEVER repeat reasoning patterns or use generic descriptions. Always respond with ONLY valid JSON arrays."
                 },
                 {
                     role: "user",
                     content: prompt
                 }
             ],
-            max_tokens: 1000,
-            temperature: 0.7
+            max_tokens: 2000, // Increased for more detailed unique reasoning
+            temperature: 0.95 // Maximum creativity to ensure unique responses
         });
         
-        const responseText = completion.choices[0].message.content;
-        console.log('OpenAI response:', responseText);
+        const responseText = completion.choices[0].message.content.trim();
+        console.log('Raw OpenAI response:', responseText);
         
-        // Parse OpenAI response
-        let aiResponse;
-        try {
-            aiResponse = JSON.parse(responseText);
-        } catch (parseError) {
-            console.error('Failed to parse OpenAI response:', parseError);
-            // Fallback: return top 5 movies by rating
-            return candidateMovies
-                .sort((a, b) => b.vote_average - a.vote_average)
-                .slice(0, 5)
-                .map(movie => ({
-                    ...movie,
-                    reasoning: "Highly rated movie that matches your selected criteria."
-                }));
+        // Clean the response to ensure it's valid JSON
+        let cleanedResponse = responseText;
+        
+        // Remove any markdown code block formatting if present
+        if (cleanedResponse.startsWith('```json')) {
+            cleanedResponse = cleanedResponse.replace(/```json\n?/, '').replace(/\n?```$/, '');
+        } else if (cleanedResponse.startsWith('```')) {
+            cleanedResponse = cleanedResponse.replace(/```\n?/, '').replace(/\n?```$/, '');
         }
         
-        // Map AI recommendations back to movie objects
-        const recommendations = aiResponse.recommendations
-            .filter(rec => rec.movieNumber >= 1 && rec.movieNumber <= candidateMovies.length)
-            .map(rec => {
-                const movie = candidateMovies[rec.movieNumber - 1];
-                return {
+        // Parse OpenAI response with robust Map-based processing
+        let aiRecommendations;
+        try {
+            // 1. Parse the AI's response string into a JavaScript object
+            aiRecommendations = JSON.parse(cleanedResponse);
+            console.log('Successfully parsed AI recommendations:', aiRecommendations);
+            
+            // Validate that we have an array
+            if (!Array.isArray(aiRecommendations)) {
+                console.error('OpenAI response is not an array:', aiRecommendations);
+                throw new Error('Invalid AI response format - expected array');
+            }
+            
+            // 2. Create a Map for efficient lookup: { movieId => reasoning }
+            const reasoningMap = new Map(
+                aiRecommendations
+                    .filter(rec => rec.id && rec.reasoning) // Only include valid entries
+                    .map(rec => [rec.id, rec.reasoning])
+            );
+            
+            console.log(`Created reasoning map with ${reasoningMap.size} entries`);
+            
+            // 3. Filter the original candidates and attach the new reasoning
+            const finalRecommendations = candidateMovies
+                .filter(movie => reasoningMap.has(movie.id)) // Keep only movies recommended by AI
+                .map(movie => ({
                     ...movie,
-                    reasoning: rec.reasoning,
-                    imdb_rating: movie.vote_average // Use TMDB rating as IMDB rating approximation
-                };
-            })
-            .slice(0, 5); // Ensure max 5 recommendations
-        
-        return recommendations;
+                    // Get the specific reasoning from the map
+                    reasoning: reasoningMap.get(movie.id),
+                    imdb_rating: movie.vote_average
+                }))
+                .slice(0, 5); // Ensure we only send 5 results
+            
+            console.log(`Successfully generated ${finalRecommendations.length} final recommendations with AI reasoning`);
+            return finalRecommendations;
+            
+        } catch (parseError) {
+            console.error('Error parsing OpenAI response or mapping reasoning:', parseError);
+            console.error('Response text was:', responseText);
+            
+            // If parsing fails, use the enhanced fallback logic
+            return generateFallbackRecommendations(candidateMovies, userSelections);
+        }
         
     } catch (error) {
         console.error('OpenAI API error:', error);
-        // Fallback: return top-rated movies
-        return candidateMovies
-            .sort((a, b) => b.vote_average - a.vote_average)
-            .slice(0, 5)
-            .map(movie => ({
-                ...movie,
-                reasoning: "Highly rated movie that matches your selected criteria.",
-                imdb_rating: movie.vote_average
-            }));
+        
+        // Use the helper function for consistent fallback behavior
+        return generateFallbackRecommendations(candidateMovies, userSelections);
     }
+}
+
+/**
+ * Generate fallback recommendations when OpenAI is unavailable
+ * @param {Array} candidateMovies - Movies from TMDB
+ * @param {Object} userSelections - User's selections for personalized fallback
+ * @returns {Array} Fallback recommendations with unique narrative reasoning
+ */
+function generateFallbackRecommendations(candidateMovies, userSelections) {
+    const context = userSelections.context || 'viewing';
+    const mood = userSelections.mood || 'entertaining';
+    
+    // Create diverse narrative reasons with specific movie details
+    const createUniqueReason = (movie, index) => {
+        const templates = [
+            `This ${movie.release_year} film's compelling narrative and exceptional ${movie.vote_average}/10 rating make it an ideal choice for creating the ${mood} atmosphere you're seeking during your ${context}.`,
+            `With its captivating storyline and stellar performances, "${movie.title}" delivers exactly the ${mood} experience that will make your ${context} truly memorable.`,
+            `The film's unique blend of storytelling and cinematic artistry perfectly captures the ${mood} mood you're looking for, making it a standout choice for your ${context}.`,
+            `"${movie.title}" offers an immersive cinematic journey that creates the perfect ${mood} ambiance for an unforgettable ${context} experience.`,
+            `This highly-rated production combines exceptional filmmaking with an engaging plot that will deliver the ${mood} entertainment you're craving for your ${context}.`
+        ];
+        
+        // Use different template for each movie to ensure uniqueness
+        return templates[index % templates.length];
+    };
+        
+    return candidateMovies
+        .sort((a, b) => b.vote_average - a.vote_average)
+        .slice(0, 5)
+        .map((movie, index) => ({
+            ...movie,
+            reasoning: createUniqueReason(movie, index),
+            imdb_rating: movie.vote_average
+        }));
 }
 
 // Health check endpoint
