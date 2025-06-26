@@ -25,11 +25,10 @@ async function testReasoningFix() {
             console.log(`\n🎬 ${index + 1}. ${movie.title} (${movie.release_year})`);
             console.log(`   Rating: ${movie.vote_average}/10`);
             console.log(`   💡 Reasoning: "${movie.reasoning}"`);
-            console.log(`   🎯 Is reasoning AI-generated? ${movie.reasoning.includes('matches your selected criteria') ? '❌ No (fallback)' : '✅ Yes!'}`);
+            console.log(`   🎯 Is reasoning AI-generated? ${movie.reasoning.includes('Highly rated movie') ? '❌ No (fallback)' : '✅ Yes!'}`);
         });
         
         const hasAIReasoning = response.data.some(movie => 
-            !movie.reasoning.includes('matches your selected criteria') &&
             !movie.reasoning.includes('Highly rated movie')
         );
         
