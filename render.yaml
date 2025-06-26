@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: popchoice
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: OPENAI_API_KEY
+        sync: false
+        description: "Your OpenAI API key - get it from https://platform.openai.com/api-keys"
+      - key: TMDB_API_KEY
+        sync: false
+        description: "Your TMDB API key - get it from https://www.themoviedb.org/settings/api"
+      - key: TMDB_BEARER_TOKEN
+        sync: false
+        description: "Your TMDB Bearer token - get it from https://www.themoviedb.org/settings/api"
+    autoDeploy: true
+    branch: main

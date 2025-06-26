@@ -1,7 +1,11 @@
 // PopChoice Backend Server
 // Node.js Express server with TMDB and OpenAI integration
 
-require('dotenv').config();
+// Only load dotenv in development (Render provides env vars directly)
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
@@ -12,10 +16,19 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize OpenAI client with error handling
+let openai;
+try {
+    if (!process.env.OPENAI_API_KEY) {
+        throw new Error('OPENAI_API_KEY environment variable is required');
+    }
+    openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY,
+    });
+} catch (error) {
+    console.error('Failed to initialize OpenAI client:', error.message);
+    process.exit(1);
+}
 
 // Rate limiting configuration to protect API keys from abuse
 const apiLimiter = rateLimit({
@@ -35,9 +48,14 @@ const apiLimiter = rateLimit({
 const RECOMMENDATION_COUNT = 6; // Number of movie recommendations to return
 
 // Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.static('public'));
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production' 
+        ? [/^https:\/\/.*\.onrender\.com$/] 
+        : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    credentials: true
+}));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Apply rate limiting to all API routes
 app.use('/api/', apiLimiter);
@@ -388,13 +406,59 @@ function generateFallbackRecommendations(candidateMovies, userSelections) {
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'OK', timestamp: new Date().toISOString() });
+    const healthCheck = {
+        status: 'OK',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: process.env.NODE_ENV || 'development',
+        apis: {
+            tmdb: !!process.env.TMDB_API_KEY,
+            openai: !!process.env.OPENAI_API_KEY
+        }
+    };
+    res.json(healthCheck);
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`🎬 PopChoice server running on http://localhost:${PORT}`);
-    console.log('🔧 Environment variables loaded:');
+// Error handling middleware
+app.use((error, req, res, next) => {
+    console.error('Unhandled error:', error);
+    res.status(500).json({
+        error: 'Internal server error',
+        message: process.env.NODE_ENV === 'production' ? 'Something went wrong' : error.message
+    });
+});
+
+// Handle 404 for API routes
+app.use('/api/*', (req, res) => {
+    res.status(404).json({ error: 'API endpoint not found' });
+});
+
+// Catch-all handler: send back React's index.html file for any non-API routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Start server with graceful shutdown handling
+const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🎬 PopChoice server running on port ${PORT}`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log('🔧 Environment variables status:');
     console.log(`   - TMDB API Key: ${process.env.TMDB_API_KEY ? '✓ Set' : '✗ Missing'}`);
+    console.log(`   - TMDB Bearer Token: ${process.env.TMDB_BEARER_TOKEN ? '✓ Set' : '✗ Missing'}`);
     console.log(`   - OpenAI API Key: ${process.env.OPENAI_API_KEY ? '✓ Set' : '✗ Missing'}`);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+    console.log('SIGTERM received. Shutting down gracefully...');
+    server.close(() => {
+        console.log('Process terminated');
+    });
+});
+
+process.on('SIGINT', () => {
+    console.log('SIGINT received. Shutting down gracefully...');
+    server.close(() => {
+        console.log('Process terminated');
+    });
 });
