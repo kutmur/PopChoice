@@ -320,7 +320,10 @@ body {
 
 .results-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* Auto-fit grid that adapts to any number of items */
+    /* Creates as many columns as can fit, each at least 320px wide */
+    /* On wide screens: 3+ columns, medium: 2 columns, small: 1 column */
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 25px;
     margin-bottom: 40px;
 }
@@ -666,7 +669,8 @@ body {
     }
     
     .results-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        /* On mobile, ensure minimum column width is smaller for better fit */
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 20px;
     }
     

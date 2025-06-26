@@ -16,6 +16,9 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Application Configuration
+const RECOMMENDATION_COUNT = 6; // Number of movie recommendations to return
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -223,11 +226,11 @@ ${JSON.stringify(movieCandidates.map(m => ({ id: m.id, title: m.title, overview:
 **Step 1: ANALYSIS (For EACH movie individually)**
 For every single movie in the candidate list, you must perform a separate analysis. Ask yourself: "How does THIS SPECIFIC movie's plot, main characters, or unique tone connect to the user's desire for a '${userSelections.mood}' mood during their '${userSelections.context}'?"
 
-**Step 2: SELECTION & REASONING (For EACH of the top 5)**
-From your individual analyses, select the top 5 movies. Then, for EACH of the 5 selected movies, you MUST write a completely distinct and specific one-sentence reasoning. This reasoning must be unique to that movie and reference its specific elements.
+**Step 2: SELECTION & REASONING (For EACH of the top ${RECOMMENDATION_COUNT})**
+From your individual analyses, select the top ${RECOMMENDATION_COUNT} movies. Then, for EACH of the ${RECOMMENDATION_COUNT} selected movies, you MUST write a completely distinct and specific one-sentence reasoning. This reasoning must be unique to that movie and reference its specific elements.
 
 **Step 3: FINAL OUTPUT (Strict JSON format)**
-Combine your 5 unique reasonings into a single JSON array.
+Combine your ${RECOMMENDATION_COUNT} unique reasonings into a single JSON array.
 
 **CRITICAL RULES TO PREVENT REPETITION:**
 • **NEVER** use the same reasoning sentence, or even a very similar sentence structure, for more than one movie.
@@ -314,7 +317,7 @@ Combine your 5 unique reasonings into a single JSON array.
                     reasoning: reasoningMap.get(movie.id),
                     imdb_rating: movie.vote_average
                 }))
-                .slice(0, 5); // Ensure we only send 5 results
+                .slice(0, RECOMMENDATION_COUNT); // Ensure we only send the specified number of results
             
             console.log(`Successfully generated ${finalRecommendations.length} final recommendations with AI reasoning`);
             return finalRecommendations;
@@ -361,7 +364,7 @@ function generateFallbackRecommendations(candidateMovies, userSelections) {
         
     return candidateMovies
         .sort((a, b) => b.vote_average - a.vote_average)
-        .slice(0, 5)
+        .slice(0, RECOMMENDATION_COUNT)
         .map((movie, index) => ({
             ...movie,
             reasoning: createUniqueReason(movie, index),
