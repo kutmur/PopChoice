@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PopChoice - Discover Your Perfect Movie</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Welcome Screen -->
+        <section id="welcome" class="view">
+            <div class="welcome-content">
+                <div class="logo">
+                    <h1>🎬 PopChoice</h1>
+                </div>
+                <h2>Discover Your Perfect Movie</h2>
+                <p>Answer a few questions and we'll recommend movies tailored just for you</p>
+                <button id="start-btn" class="primary-btn">Start Discovery</button>
+            </div>
+        </section>
+
+        <!-- Questionnaire Container -->
+        <section id="questionnaire" class="view">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+                <span class="progress-text">Step 1 of 7</span>
+            </div>
+
+            <!-- Question 1: Preferred Genres -->
+            <div id="question-1" class="question-card">
+                <h2>What genres do you enjoy?</h2>
+                <p>Select all that apply</p>
+                <div class="options-grid">
+                    <div class="option-card" data-value="action">
+                        <span class="emoji">💥</span>
+                        <span class="label">Action</span>
+                    </div>
+                    <div class="option-card" data-value="comedy">
+                        <span class="emoji">😂</span>
+                        <span class="label">Comedy</span>
+                    </div>
+                    <div class="option-card" data-value="drama">
+                        <span class="emoji">🎭</span>
+                        <span class="label">Drama</span>
+                    </div>
+                    <div class="option-card" data-value="horror">
+                        <span class="emoji">👻</span>
+                        <span class="label">Horror</span>
+                    </div>
+                    <div class="option-card" data-value="romance">
+                        <span class="emoji">❤️</span>
+                        <span class="label">Romance</span>
+                    </div>
+                    <div class="option-card" data-value="sci-fi">
+                        <span class="emoji">🚀</span>
+                        <span class="label">Sci-Fi</span>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button id="next-btn-1" class="primary-btn" disabled>Next</button>
+                </div>
+            </div>
+
+            <!-- Question 2: Movie Era -->
+            <div id="question-2" class="question-card">
+                <h2>Which era of movies do you prefer?</h2>
+                <p>Choose one</p>
+                <div class="options-grid">
+                    <div class="option-card single-select" data-value="classic">
+                        <span class="emoji">🎞️</span>
+                        <span class="label">Classic (1970s-1990s)</span>
+                    </div>
+                    <div class="option-card single-select" data-value="modern">
+                        <span class="emoji">📱</span>
+                        <span class="label">Modern (2000s-2010s)</span>
+                    </div>
+                    <div class="option-card single-select" data-value="recent">
+                        <span class="emoji">⭐</span>
+                        <span class="label">Recent (2020s)</span>
+                    </div>
+                    <div class="option-card single-select" data-value="any">
+                        <span class="emoji">🎬</span>
+                        <span class="label">Any Era</span>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button id="prev-btn-2" class="secondary-btn">Previous</button>
+                    <button id="next-btn-2" class="primary-btn" disabled>Next</button>
+                </div>
+            </div>
+
+            <!-- Question 3: Mood -->
+            <div id="question-3" class="question-card">
+                <h2>What's your current mood?</h2>
+                <p>Choose one</p>
+                <div class="options-grid">
+                    <div class="option-card single-select" data-value="uplifting">
+                        <span class="emoji">☀️</span>
+                        <span class="label">Uplifting & Positive</span>
+                    </div>
+                    <div class="option-card single-select" data-value="thrilling">
+                        <span class="emoji">⚡</span>
+                        <span class="label">Thrilling & Exciting</span>
+                    </div>
+                    <div class="option-card single-select" data-value="emotional">
+                        <span class="emoji">💭</span>
+                        <span class="label">Emotional & Deep</span>
+                    </div>
+                    <div class="option-card single-select" data-value="fun">
+                        <span class="emoji">🎉</span>
+                        <span class="label">Fun & Light-hearted</span>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button id="prev-btn-3" class="secondary-btn">Previous</button>
+                    <button id="next-btn-3" class="primary-btn" disabled>Next</button>
+                </div>
+            </div>
+
+            <!-- Question 4: Runtime Preference -->
+            <div id="question-4" class="question-card">
+                <h2>How much time do you have?</h2>
+                <p>Choose one</p>
+                <div class="options-grid">
+                    <div class="option-card single-select" data-value="short">
+                        <span class="emoji">⏰</span>
+                        <span class="label">Quick Watch (< 2 hours)</span>
+                    </div>
+                    <div class="option-card single-select" data-value="long">
+                        <span class="emoji">🍿</span>
+                        <span class="label">Long Epic (2+ hours)</span>
+                    </div>
+                    <div class="option-card single-select" data-value="any-length">
+                        <span class="emoji">🎬</span>
+                        <span class="label">Any Length</span>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button id="prev-btn-4" class="secondary-btn">Previous</button>
+                    <button id="next-btn-4" class="primary-btn" disabled>Next</button>
+                </div>
+            </div>
+
+            <!-- Question 5: Viewing Context -->
+            <div id="question-5" class="question-card">
+                <h2>Who are you watching with?</h2>
+                <p>Choose one</p>
+                <div class="options-grid">
+                    <div class="option-card single-select" data-value="solo">
+                        <span class="emoji">🧘</span>
+                        <span class="label">Solo Viewing</span>
+                    </div>
+                    <div class="option-card single-select" data-value="friends">
+                        <span class="emoji">👥</span>
+                        <span class="label">With Friends</span>
+                    </div>
+                    <div class="option-card single-select" data-value="family">
+                        <span class="emoji">👨‍👩‍👧‍👦</span>
+                        <span class="label">Family Night</span>
+                    </div>
+                    <div class="option-card single-select" data-value="date">
+                        <span class="emoji">💕</span>
+                        <span class="label">Date Night</span>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button id="prev-btn-5" class="secondary-btn">Previous</button>
+                    <button id="next-btn-5" class="primary-btn" disabled>Next</button>
+                </div>
+            </div>
+
+            <!-- Question 6: Rating Preference -->
+            <div id="question-6" class="question-card">
+                <h2>What's your quality preference?</h2>
+                <p>Choose one</p>
+                <div class="options-grid">
+                    <div class="option-card single-select" data-value="highly-rated">
+                        <span class="emoji">⭐</span>
+                        <span class="label">Highly Rated Only (8.0+)</span>
+                    </div>
+                    <div class="option-card single-select" data-value="good-rated">
+                        <span class="emoji">👍</span>
+                        <span class="label">Good Movies (6.5+)</span>
+                    </div>
+                    <div class="option-card single-select" data-value="any-rating">
+                        <span class="emoji">🎲</span>
+                        <span class="label">Surprise Me</span>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button id="prev-btn-6" class="secondary-btn">Previous</button>
+                    <button id="next-btn-6" class="primary-btn" disabled>Next</button>
+                </div>
+            </div>
+
+            <!-- Question 7: Final Preference -->
+            <div id="question-7" class="question-card">
+                <h2>What themes interest you most?</h2>
+                <p>Select all that apply</p>
+                <div class="options-grid">
+                    <div class="option-card" data-value="friendship">
+                        <span class="emoji">🤝</span>
+                        <span class="label">Friendship</span>
+                    </div>
+                    <div class="option-card" data-value="adventure">
+                        <span class="emoji">🗺️</span>
+                        <span class="label">Adventure</span>
+                    </div>
+                    <div class="option-card" data-value="mystery">
+                        <span class="emoji">🔍</span>
+                        <span class="label">Mystery</span>
+                    </div>
+                    <div class="option-card" data-value="family">
+                        <span class="emoji">🏠</span>
+                        <span class="label">Family Values</span>
+                    </div>
+                    <div class="option-card" data-value="redemption">
+                        <span class="emoji">🔄</span>
+                        <span class="label">Redemption</span>
+                    </div>
+                    <div class="option-card" data-value="coming-of-age">
+                        <span class="emoji">🌱</span>
+                        <span class="label">Coming of Age</span>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button id="prev-btn-7" class="secondary-btn">Previous</button>
+                    <button id="finish-btn" class="primary-btn" disabled>Get My Recommendations</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading Spinner -->
+        <section id="loading-spinner" class="view">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <h2>Finding Your Perfect Movies...</h2>
+                <p>Analyzing your preferences and matching you with the best options</p>
+            </div>
+        </section>
+
+        <!-- Results Screen -->
+        <section id="results-screen" class="view">
+            <div class="results-header">
+                <h2>Your Personalized Movie Recommendations</h2>
+                <p>Based on your preferences, here are movies you'll love:</p>
+            </div>
+            <div id="results-container" class="results-grid">
+                <!-- Movies will be dynamically inserted here -->
+            </div>
+            <div class="results-footer">
+                <button id="restart-btn" class="secondary-btn">Start Over</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Movie Detail Modal -->
+    <div id="movie-detail-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <div class="movie-poster">
+                    <img id="modal-poster" src="" alt="Movie Poster">
+                </div>
+                <div class="movie-info">
+                    <h2 id="modal-title"></h2>
+                    <div class="movie-meta">
+                        <span id="modal-year"></span>
+                        <span id="modal-rating">⭐ </span>
+                    </div>
+                    <div class="movie-genres" id="modal-genres"></div>
+                    <p id="modal-plot"></p>
+                    <div class="movie-cast">
+                        <h3>Cast:</h3>
+                        <p id="modal-cast"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load JavaScript files -->
+    <script defer src="/public/js/main.js"></script>
+</body>
+</html>
