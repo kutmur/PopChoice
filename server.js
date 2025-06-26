@@ -50,7 +50,7 @@ const RECOMMENDATION_COUNT = 6; // Number of movie recommendations to return
 // Middleware
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
-        ? ['https://*.onrender.com'] 
+        ? [/^https:\/\/.*\.onrender\.com$/] 
         : ['http://localhost:3000', 'http://127.0.0.1:3000'],
     credentials: true
 }));
