@@ -7,6 +7,7 @@ const cors = require('cors');
 const axios = require('axios');
 const { OpenAI } = require('openai');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,20 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Rate limiting configuration to protect API keys from abuse
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 30, // Limit each IP to 30 requests per windowMs
+    message: {
+        error: 'Too many requests from this IP, please try again later.',
+        retryAfter: '15 minutes'
+    },
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    // Skip rate limiting for health checks
+    skip: (req, res) => req.path === '/api/health'
+});
+
 // Application Configuration
 const RECOMMENDATION_COUNT = 6; // Number of movie recommendations to return
 
@@ -23,6 +38,9 @@ const RECOMMENDATION_COUNT = 6; // Number of movie recommendations to return
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
+
+// Apply rate limiting to all API routes
+app.use('/api/', apiLimiter);
 
 // Serve the main HTML file
 app.get('/', (req, res) => {
