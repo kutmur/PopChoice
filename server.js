@@ -231,7 +231,7 @@ async function getOpenAIRecommendations(candidateMovies, userSelections) {
         
         // Create the enhanced OpenAI prompt for unique, specific reasoning
 
-        const prompt = `You are a brilliant and highly specific movie analyst. Your mission is to provide five completely unique and tailored recommendations for a user.
+        const prompt = `You are a brilliant and highly specific movie analyst. Your mission is to provide ${RECOMMENDATION_COUNT} completely unique and tailored recommendations for a user.
 
 **User's Request:** ${userContext}
 
