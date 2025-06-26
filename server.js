@@ -297,11 +297,8 @@ Combine your ${RECOMMENDATION_COUNT} unique reasonings into a single JSON array.
         let cleanedResponse = responseText;
         
         // Remove any markdown code block formatting if present
-        if (cleanedResponse.startsWith('```json')) {
-            cleanedResponse = cleanedResponse.replace(/```json\n?/, '').replace(/\n?```$/, '');
-        } else if (cleanedResponse.startsWith('```')) {
-            cleanedResponse = cleanedResponse.replace(/```\n?/, '').replace(/\n?```$/, '');
-        }
+        // Remove any markdown code block formatting (e.g., ```json or ```)
+        cleanedResponse = cleanedResponse.replace(/```(?:\w+)?\n?|```$/g, '');
         
         // Parse OpenAI response with robust Map-based processing
         let aiRecommendations;
