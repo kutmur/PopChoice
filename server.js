@@ -433,9 +433,9 @@ app.use('/api/*', (req, res) => {
     res.status(404).json({ error: 'API endpoint not found' });
 });
 
-// Catch-all handler: send back React's index.html file for any non-API routes
+// Catch-all handler: send back index.html file for any non-API routes
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Start server with graceful shutdown handling
