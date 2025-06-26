@@ -3,22 +3,28 @@
   "version": "1.0.0",
   "description": "AI-powered movie recommendation app using TMDB and OpenAI APIs",
   "main": "server.js",
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
+  },
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "build": "echo 'No build step required for this project'",
+    "test": "echo 'No tests specified' && exit 0"
   },
-  "keywords": ["movie", "recommendations", "ai", "tmdb", "openai"],
+  "keywords": ["movie", "recommendations", "ai", "tmdb", "openai", "express", "nodejs"],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5",
     "axios": "^1.6.0",
-    "dotenv": "^16.3.1",
     "express-rate-limit": "^7.3.1",
     "openai": "^4.20.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "dotenv": "^16.3.1"
   }
 }
