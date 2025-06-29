@@ -11,7 +11,17 @@ PopChoice is a full-stack web application that provides personalized movie recom
 - **Real-time Recommendations**: Fast API-driven recommendations
 - **Detailed Movie Information**: Modal dialogs with comprehensive movie details
 
-## 🚀 Tech Stack
+## 📸 Screenshots
+
+### Welcome Screen
+![PopChoice Welcome Screen](screenshots/welcome-screen.png)
+*Clean and inviting welcome screen with the PopChoice branding and call-to-action button*
+
+### Recommendations View
+![PopChoice Recommendations](screenshots/recommendations-view.png)
+*Personalized movie recommendations displayed in an elegant card layout with detailed information and AI-generated reasoning*
+
+## �🚀 Tech Stack
 
 ### Frontend
 - **HTML5/CSS3**: Modern responsive design
@@ -97,6 +107,9 @@ PopChoice/
 ├── package.json           # Node.js dependencies
 ├── .env                   # Environment variables (API keys)
 ├── index.html             # Main HTML file
+├── screenshots/           # Application screenshots
+│   ├── welcome-screen.png # Welcome screen image
+│   └── recommendations-view.png # Recommendations view image
 ├── public/
 │   ├── css/
 │   │   └── style.css      # Comprehensive styling
