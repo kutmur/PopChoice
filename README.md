@@ -21,7 +21,7 @@ PopChoice is a full-stack web application that provides personalized movie recom
 ![PopChoice Recommendations](screenshots/recommendations-view.png)
 *Personalized movie recommendations displayed in an elegant card layout with detailed information and AI-generated reasoning*
 
-## �🚀 Tech Stack
+## 🚀 Tech Stack
 
 ### Frontend
 - **HTML5/CSS3**: Modern responsive design
