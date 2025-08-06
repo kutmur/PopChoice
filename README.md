@@ -1,4 +1,4 @@
-# 🎬 PopChoice - AI-Powered Movie Recommendation App
+# PopChoice - AI-Powered Movie Recommendation App
 
 PopChoice is a full-stack web application that provides personalized movie recommendations using TMDB and OpenAI APIs. Users answer a questionnaire about their preferences, and the app returns intelligently curated movie suggestions with AI-generated reasoning.
 
