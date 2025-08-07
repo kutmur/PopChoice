@@ -2,7 +2,7 @@
 
 PopChoice is a full-stack web application that provides personalized movie recommendations using TMDB and OpenAI APIs. Users answer a questionnaire about their preferences, and the app returns intelligently curated movie suggestions with AI-generated reasoning.
 
-## ✨ Features
+##  Features
 
 - **Interactive Questionnaire**: 7-step questionnaire to capture user preferences
 - **TMDB Integration**: Fetches real movie data from The Movie Database API
@@ -11,7 +11,7 @@ PopChoice is a full-stack web application that provides personalized movie recom
 - **Real-time Recommendations**: Fast API-driven recommendations
 - **Detailed Movie Information**: Modal dialogs with comprehensive movie details
 
-## 📸 Screenshots
+##  Screenshots
 
 ### Welcome Screen
 ![PopChoice Welcome Screen](screenshots/welcome-screen.png)
@@ -21,7 +21,7 @@ PopChoice is a full-stack web application that provides personalized movie recom
 ![PopChoice Recommendations](screenshots/recommendations-view.png)
 *Personalized movie recommendations displayed in an elegant card layout with detailed information and AI-generated reasoning*
 
-## 🚀 Tech Stack
+## Tech Stack
 
 ### Frontend
 - **HTML5/CSS3**: Modern responsive design
@@ -37,14 +37,14 @@ PopChoice is a full-stack web application that provides personalized movie recom
 - **Axios**: HTTP client
 - **CORS**: Cross-origin resource sharing
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Node.js (v14 or higher)
 - NPM or Yarn
 - TMDB API key
 - OpenAI API key
 
-## 🛠️ Installation
+## Installation
 
 1. **Clone the repository**
    ```bash
@@ -74,7 +74,7 @@ PopChoice is a full-stack web application that provides personalized movie recom
 5. **Open your browser**
    Navigate to `http://localhost:3000`
 
-## 🎯 How It Works
+## How It Works
 
 ### 1. User Journey
 1. **Welcome Screen**: Users start their movie discovery journey
@@ -99,7 +99,7 @@ PopChoice is a full-stack web application that provides personalized movie recom
 - **UIManager Class**: Handles all DOM manipulation and UI updates
 - **Modular Design**: Separation of concerns between logic and presentation
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 PopChoice/
@@ -119,7 +119,7 @@ PopChoice/
 └── README.md
 ```
 
-## 🔧 API Endpoints
+## API Endpoints
 
 ### POST /api/recommendations
 Generates movie recommendations based on user preferences.
@@ -155,7 +155,7 @@ Generates movie recommendations based on user preferences.
 ### GET /api/health
 Health check endpoint.
 
-## 🎨 Design Features
+## Design Features
 
 - **Glass-morphism UI**: Modern translucent design elements
 - **Responsive Design**: Works on desktop, tablet, and mobile
@@ -164,7 +164,7 @@ Health check endpoint.
 - **Loading States**: User feedback during API calls
 - **Error Handling**: Graceful error messages and fallbacks
 
-## 🔐 Environment Variables
+## Environment Variables
 
 | Variable | Description | Required |
 |----------|-------------|----------|
@@ -173,7 +173,7 @@ Health check endpoint.
 | `TMDB_BEARER_TOKEN` | TMDB Bearer token for API access | Yes |
 | `PORT` | Server port (default: 3000) | No |
 
-## 🚀 Deployment
+## Deployment
 
 ### Local Development
 ```bash
@@ -186,7 +186,7 @@ npm install --production
 NODE_ENV=production npm start
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -194,24 +194,24 @@ NODE_ENV=production npm start
 4. Test thoroughly
 5. Submit a pull request
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **TMDB**: For providing comprehensive movie data
 - **OpenAI**: For intelligent recommendation capabilities
 - **Inter Font**: For beautiful typography
 - **Community**: For inspiration and feedback
 
-## 🐛 Known Issues
+## Known Issues
 
 - OpenAI may occasionally use fallback logic if API limits are reached
 - Movie cast information is limited in TMDB discovery endpoint
 - Some older movies may have limited poster images
 
-## 📈 Future Enhancements
+## Future Enhancements
 
 - User accounts and saved preferences
 - Movie trailer integration
