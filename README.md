@@ -206,7 +206,8 @@ Health check endpoint.
 
 ### Local Development
 ```bash
-npm start
+npm start        # Production mode
+npm run dev      # Development mode with auto-reload (nodemon)
 ```
 
 ### Production
@@ -215,10 +216,38 @@ npm install --production
 NODE_ENV=production npm start
 ```
 
+### Render.com Deployment
+This project includes a `render.yaml` configuration for easy deployment to Render.com:
+1. Connect your GitHub repository to Render
+2. Set the required environment variables (OPENAI_API_KEY, TMDB_API_KEY, TMDB_BEARER_TOKEN)
+3. Deploy automatically on push to main branch
+
+## Development
+
+For detailed development setup, guidelines, and contribution instructions, please see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Quick start for developers:
+```bash
+# Install dependencies
+npm install
+
+# Create .env file with your API keys
+# See .env.example or CONTRIBUTING.md for required variables
+
+# Start development server with auto-reload
+npm run dev
+
+# Run tests (ensure server is running first)
+npm run test:api
+```
+
 ## Contributing
 
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+Quick steps:
 1. Fork the repository
-2. Create a feature branch
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Make your changes
 4. Test thoroughly
 5. Submit a pull request
