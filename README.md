@@ -74,6 +74,33 @@ PopChoice is a full-stack web application that provides personalized movie recom
 5. **Open your browser**
    Navigate to `http://localhost:3000`
 
+## Testing
+
+The project includes several test scripts located in the `/tests` directory:
+
+- **test-api.js** - Tests the API recommendations endpoint
+- **test-final.js** - Tests unique reasoning improvements
+- **test-map-logic.js** - Tests Map-based reasoning logic
+- **test-narrative.js** - Tests narrative reasoning quality
+- **test-reasoning.js** - Quick reasoning fix tests
+- **test-mock-ai.js** - Simulates OpenAI responses
+
+**To run tests:**
+
+1. Start the server in one terminal:
+```bash
+npm start
+```
+
+2. Run individual tests in another terminal:
+```bash
+npm run test:api
+# or
+node tests/test-api.js
+```
+
+**Note**: Tests require the server to be running and must be executed manually. Run `npm test` for a list of available test scripts.
+
 ## How It Works
 
 ### 1. User Journey
@@ -104,19 +131,30 @@ PopChoice is a full-stack web application that provides personalized movie recom
 ```
 PopChoice/
 ├── server.js              # Express server with API endpoints
+├── index.html             # Main HTML file (frontend entry point)
 ├── package.json           # Node.js dependencies
-├── .env                   # Environment variables (API keys)
-├── index.html             # Main HTML file
-├── screenshots/           # Application screenshots
-│   ├── welcome-screen.png # Welcome screen image
-│   └── recommendations-view.png # Recommendations view image
-├── public/
+├── .env                   # Environment variables (API keys) - not in repo
+├── public/                # Static frontend assets
 │   ├── css/
 │   │   └── style.css      # Comprehensive styling
 │   └── js/
 │       └── main.js        # Frontend application logic
-├── LICENSE
-└── README.md
+├── tests/                 # Test scripts for API and functionality
+│   ├── test-api.js        # API endpoint tests
+│   ├── test-final.js      # Final reasoning tests
+│   ├── test-map-logic.js  # Map-based logic tests
+│   ├── test-mock-ai.js    # Mock AI response tests
+│   ├── test-narrative.js  # Narrative reasoning tests
+│   └── test-reasoning.js  # Reasoning logic tests
+├── docs/                  # Documentation and demo scripts
+│   ├── demo-narrative.js  # Narrative demonstration
+│   └── final-summary.js   # Project summary documentation
+├── screenshots/           # Application screenshots
+│   ├── welcome-screen.png # Welcome screen image
+│   └── recommendations-view.png # Recommendations view image
+├── render.yaml            # Render.com deployment configuration
+├── LICENSE                # MIT License
+└── README.md              # This file
 ```
 
 ## API Endpoints
@@ -177,7 +215,8 @@ Health check endpoint.
 
 ### Local Development
 ```bash
-npm start
+npm start        # Production mode
+npm run dev      # Development mode with auto-reload (nodemon)
 ```
 
 ### Production
@@ -186,10 +225,38 @@ npm install --production
 NODE_ENV=production npm start
 ```
 
+### Render.com Deployment
+This project includes a `render.yaml` configuration for easy deployment to Render.com:
+1. Connect your GitHub repository to Render
+2. Set the required environment variables (OPENAI_API_KEY, TMDB_API_KEY, TMDB_BEARER_TOKEN)
+3. Deploy automatically on push to main branch
+
+## Development
+
+For detailed development setup, guidelines, and contribution instructions, please see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Quick start for developers:
+```bash
+# Install dependencies
+npm install
+
+# Create .env file with your API keys
+# See .env.example or CONTRIBUTING.md for required variables
+
+# Start development server with auto-reload
+npm run dev
+
+# Run tests (ensure server is running first)
+npm run test:api
+```
+
 ## Contributing
 
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+
+Quick steps:
 1. Fork the repository
-2. Create a feature branch
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Make your changes
 4. Test thoroughly
 5. Submit a pull request
