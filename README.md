@@ -74,6 +74,24 @@ PopChoice is a full-stack web application that provides personalized movie recom
 5. **Open your browser**
    Navigate to `http://localhost:3000`
 
+## Testing
+
+The project includes several test scripts located in the `/tests` directory:
+
+- **test-api.js** - Tests the API recommendations endpoint
+- **test-final.js** - Tests unique reasoning improvements
+- **test-map-logic.js** - Tests Map-based reasoning logic
+- **test-narrative.js** - Tests narrative reasoning quality
+- **test-reasoning.js** - Quick reasoning fix tests
+- **test-mock-ai.js** - Simulates OpenAI responses
+
+To run a test (ensure server is running first):
+```bash
+node tests/test-api.js
+```
+
+Note: The npm test script currently returns a placeholder. Individual test scripts must be run manually.
+
 ## How It Works
 
 ### 1. User Journey
@@ -104,19 +122,30 @@ PopChoice is a full-stack web application that provides personalized movie recom
 ```
 PopChoice/
 ├── server.js              # Express server with API endpoints
+├── index.html             # Main HTML file (frontend entry point)
 ├── package.json           # Node.js dependencies
-├── .env                   # Environment variables (API keys)
-├── index.html             # Main HTML file
-├── screenshots/           # Application screenshots
-│   ├── welcome-screen.png # Welcome screen image
-│   └── recommendations-view.png # Recommendations view image
-├── public/
+├── .env                   # Environment variables (API keys) - not in repo
+├── public/                # Static frontend assets
 │   ├── css/
 │   │   └── style.css      # Comprehensive styling
 │   └── js/
 │       └── main.js        # Frontend application logic
-├── LICENSE
-└── README.md
+├── tests/                 # Test scripts for API and functionality
+│   ├── test-api.js        # API endpoint tests
+│   ├── test-final.js      # Final reasoning tests
+│   ├── test-map-logic.js  # Map-based logic tests
+│   ├── test-mock-ai.js    # Mock AI response tests
+│   ├── test-narrative.js  # Narrative reasoning tests
+│   └── test-reasoning.js  # Reasoning logic tests
+├── docs/                  # Documentation and demo scripts
+│   ├── demo-narrative.js  # Narrative demonstration
+│   └── final-summary.js   # Project summary documentation
+├── screenshots/           # Application screenshots
+│   ├── welcome-screen.png # Welcome screen image
+│   └── recommendations-view.png # Recommendations view image
+├── render.yaml            # Render.com deployment configuration
+├── LICENSE                # MIT License
+└── README.md              # This file
 ```
 
 ## API Endpoints

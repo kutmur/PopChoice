@@ -11,7 +11,13 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "build": "echo 'No build step required for this project'",
-    "test": "echo 'No tests specified' && exit 0"
+    "test": "echo 'Run individual test scripts: npm run test:api, test:final, test:map, test:narrative, test:reasoning, test:mock'",
+    "test:api": "node tests/test-api.js",
+    "test:final": "node tests/test-final.js",
+    "test:map": "node tests/test-map-logic.js",
+    "test:narrative": "node tests/test-narrative.js",
+    "test:reasoning": "node tests/test-reasoning.js",
+    "test:mock": "node tests/test-mock-ai.js"
   },
   "keywords": ["movie", "recommendations", "ai", "tmdb", "openai", "express", "nodejs"],
   "author": "",
