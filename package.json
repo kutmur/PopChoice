@@ -11,7 +11,7 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "build": "echo 'No build step required for this project'",
-    "test": "echo 'Run individual test scripts: npm run test:api, test:final, test:map, test:narrative, test:reasoning, test:mock'",
+    "test": "echo 'Run individual test scripts: npm run test:api, npm run test:final, npm run test:map, npm run test:narrative, npm run test:reasoning, npm run test:mock'",
     "test:api": "node tests/test-api.js",
     "test:final": "node tests/test-final.js",
     "test:map": "node tests/test-map-logic.js",
