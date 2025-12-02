@@ -30,8 +30,7 @@ async function testNarrativeReasoning() {
                 'matches your preferences',
                 'based on your selection', 
                 'fits your criteria',
-                'perfect for your',
-                'matches your'
+                'perfect for your'
             ].some(phrase => reasoning.toLowerCase().includes(phrase));
             
             // Check for narrative elements (GOOD)

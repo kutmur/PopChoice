@@ -85,12 +85,21 @@ The project includes several test scripts located in the `/tests` directory:
 - **test-reasoning.js** - Quick reasoning fix tests
 - **test-mock-ai.js** - Simulates OpenAI responses
 
-To run a test (ensure server is running first):
+**To run tests:**
+
+1. Start the server in one terminal:
 ```bash
+npm start
+```
+
+2. Run individual tests in another terminal:
+```bash
+npm run test:api
+# or
 node tests/test-api.js
 ```
 
-Note: The npm test script currently returns a placeholder. Individual test scripts must be run manually.
+**Note**: Tests require the server to be running and must be executed manually. Run `npm test` for a list of available test scripts.
 
 ## How It Works
 
